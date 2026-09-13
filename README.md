@@ -3,62 +3,70 @@
   <img src="https://github.com/user-attachments/assets/499f7ed7-00b5-43d0-8364-2d4fde58140d#gh-dark-mode-only" alt="JLS Logo" width="256">
 </p>
 
+---
 
+<p align="center">
+  <b>An audiophile-focused music player with bit-perfect playback powered by the BASS audio engine, customizable visuals, and listening statistics, built for a fully offline and privacy-friendly listening experience.</b>
+</p>
 
 ---
 
-**An audiophile-focused music player with bit-perfect playback powered by the BASS engine, customizable visuals, and detailed listening statistics, built for a fully offline and privacy-friendly listening experience.**
+### File Browser
+Experience your local music collection exactly how it is structured on your drive.
 
-<div align="center">
-  <!-- Перетащи сюда коллаж с File Browser, Playlists и Albums -->
-  <img src="ссылка_на_коллаж_библиотеки.png" alt="Library and Playlists">
-</div>
+<br>
 
-### 🎛️ Audio Engine & Playback
+<p align="center">
+  <i>Default list view for convenience and sorting</i><br><br>
+  <img src="https://github.com/user-attachments/assets/e264c126-2885-47b9-ba25-4bd8d1458099" alt="File Browser List View">
+</p>
+
+<br>
+
+<p align="center">
+  <i>Album grid view for a beautiful visual experience</i><br><br>
+  <img src="https://github.com/user-attachments/assets/7054765d-523a-4dc6-a025-9fb5dc7ac0a7" alt="Album Grid View">
+</p>
+
+---
+
+### Playlists
+Create and manage your playlists with ease. Add tracks via drag-and-drop or directly from the player interface. Personalize your library using the built-in visual editor to customize playlist cards with unique colors and cover arts.
+
+<br>
+
+<p align="center">
+  <i>Built-in visual editor for customizing playlist appearance</i><br><br>
+  <img width="2042" height="1001" alt="image_2026-09-13_19-44-37" src="https://github.com/user-attachments/assets/e5deeae1-18dd-468b-a8df-d27fa0bc7a8f" />
+</p>
+
+### ⚙️ Core Features
+
+**🎛️ Audio Engine & Playback**
 * **WASAPI / ASIO** Bit-perfect output
 * **Gapless Playback & Crossfade**
 * **High-Resolution Audio Support**
 * **Smart Silence Skipping**
 
-<div align="center">
-  <!-- Перетащи сюда скриншот режима Now Playing и UI -->
-  <img src="ссылка_на_коллаж_now_playing.png" alt="Now Playing Interface">
-</div>
-
-### 🎨 UI & Visuals
+**🎨 UI & Visuals**
 * **Audio-reactive fluid background**
 * **Smart color extraction** from Album Art
 * **Customizable Waveforms & VU-meters**
 * **Minimal UI layouts**
 
-<div align="center">
-  <!-- Перетащи сюда коллаж со статистикой -->
-  <img src="ссылка_на_коллаж_статистики.png" alt="Advanced Listening Statistics">
-</div>
-
-### 📊 Advanced Statistics
+**📊 Advanced Statistics**
 * **Detailed listening session tracking**
 * **Top Tracks, Artists & Albums logic**
 * **Skip rate & Completion percentages**
 * **Streak counter & Audio format stats**
 
-<div align="center">
-  <!-- Перетащи сюда коллаж редактора тегов и текстов (LRC) -->
-  <img src="ссылка_на_коллаж_редакторов.png" alt="Tag and LRC Editors">
-</div>
-
-### ⚙️ Workflow & Lyrics
+**📝 Workflow & Lyrics**
 * **Built-in LRC Editor** with ms-sync
 * **Single & Bulk Tag Editing**
 * **Global Hotkeys & Media Keys support**
 * **OSD Popup & Mini Player**
 
 ---
-
-### 🛠️ Installation & Build
-1. Clone the repository: `git clone https://github.com/JyllySad/JLS-Audio-Player.git`
-2. Open `JLS.slnx` in Visual Studio 2022.
-3. Restore NuGet packages and build the solution.
 
 ### 📚 Powered By & Acknowledgements
 * **Audio Engine:** BASS Audio Library by Un4seen Developments, wrapped with ManagedBass.
