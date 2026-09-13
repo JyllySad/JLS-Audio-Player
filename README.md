@@ -40,6 +40,18 @@ Create and manage your playlists with ease. Add tracks via drag-and-drop or dire
   <img width="2042" height="1001" alt="image_2026-09-13_19-44-37" src="https://github.com/user-attachments/assets/e5deeae1-18dd-468b-a8df-d27fa0bc7a8f" />
 </p>
 
+---
+
+### Saved Albums
+Save your favorite albums in a dedicated tab. Keep your most cherished releases organized and easily accessible with beautiful album cards.
+
+<br>
+
+<p align="center">
+  <i>Dedicated view for your favorite saved albums</i><br><br>
+  <img width="2042" height="1001" alt="image_2026-09-14_02-21-22" src="https://github.com/user-attachments/assets/f7e37ffd-87fc-498f-ba90-02e9d8597278" />
+</p>
+
 ### ⚙️ Core Features
 
 **🎛️ Audio Engine & Playback**
