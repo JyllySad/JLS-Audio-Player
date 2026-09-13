@@ -1,0 +1,308 @@
+<Window x:Class="JLS.Views.OsdWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:JLS.Converters"
+        Title="OSD" Height="170" Width="450"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        Topmost="True" ShowInTaskbar="False" ShowActivated="False" Focusable="False" IsHitTestVisible="False">
+
+    <Window.Resources>
+        <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
+
+        <converters:VolumeToSpeakerIconConverter x:Key="VolumeToSpeakerIconConverter"/>
+
+        <Style x:Key="OsdVerticalSlider" TargetType="Slider">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid>
+
+                            <Border Background="{Binding DataContext.DarkColor, RelativeSource={RelativeSource AncestorType=Window}}" 
+                            Width="6" CornerRadius="3" HorizontalAlignment="Center"/>
+
+                            <Track Name="PART_Track">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="Slider.DecreaseLarge">
+                                        <RepeatButton.Template>
+                                            <ControlTemplate>
+                                                <Border Background="{Binding DataContext.LightColor, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                                Width="6" CornerRadius="3" HorizontalAlignment="Center"/>
+                                            </ControlTemplate>
+                                        </RepeatButton.Template>
+                                    </RepeatButton>
+                                </Track.DecreaseRepeatButton>
+
+                                <Track.Thumb>
+                                    <Thumb Width="0" Height="0"/>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border Margin="10,10,10,30">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" Opacity="0.6" ShadowDepth="8" Direction="270" Color="Black"/>
+        </Border.Effect>
+        <Border.Style>
+            <Style TargetType="Border">
+                <Setter Property="Background" Value="{Binding BottomPanelBackground}"/>
+                <Setter Property="CornerRadius" Value="12"/>
+                <Setter Property="BorderThickness" Value="0"/>
+
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsGlassModeEnabled}" Value="True">
+                        <Setter Property="CornerRadius" Value="16"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <SolidColorBrush Color="{Binding DarkColor.Color, FallbackValue=#121212}" Opacity="0.93"/>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+
+        <Border>
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="12"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsGlassModeEnabled}" Value="True">
+                            <Setter Property="CornerRadius" Value="16"/>
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#26FFFFFF" Offset="0.0" />
+                                        <GradientStop Color="#0EFFFFFF" Offset="0.15" />
+                                        <GradientStop Color="#0AFFFFFF" Offset="0.5" />
+                                        <GradientStop Color="#0AFFFFFF" Offset="1.0" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+            <Border ClipToBounds="True">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="12"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsGlassModeEnabled}" Value="True">
+                                <Setter Property="CornerRadius" Value="16"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+
+                <Grid x:Name="OsdRootGrid">
+
+                    <Grid.OpacityMask>
+                        <VisualBrush>
+                            <VisualBrush.Visual>
+                                <Border Background="Black" 
+                                        CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType=Border}}" 
+                                        Width="{Binding ActualWidth, ElementName=OsdRootGrid}" 
+                                        Height="{Binding ActualHeight, ElementName=OsdRootGrid}"/>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Grid.OpacityMask>
+
+                    <Border IsHitTestVisible="False" CornerRadius="15" BorderThickness="1,1,1,0" Panel.ZIndex="10">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsGlassModeEnabled}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Setter Property="BorderBrush">
+                                            <Setter.Value>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                    <GradientStop Color="#70FFFFFF" Offset="0.0" />
+                                                    <GradientStop Color="#00FFFFFF" Offset="0.2" />
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+
+                    <Rectangle HorizontalAlignment="Left" 
+                           Fill="{Binding LightColor}" 
+                           Opacity="0.22"
+                           Width="{Binding ActualWidth, ElementName=OsdRootGrid}">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform ScaleX="{Binding WaveformProgress}" ScaleY="1" />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+
+                <Grid Margin="15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" Margin="0,0,15,0" Width="35">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Slider Orientation="Vertical" Minimum="0" Maximum="1" Value="{Binding Volume}" 
+                                Style="{StaticResource OsdVerticalSlider}" Margin="0,0,0,8"/>
+
+                        <Grid Grid.Row="1" Height="20">
+
+                            <Viewbox Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Viewbox.Style>
+                                    <Style TargetType="Viewbox">
+                                        <Setter Property="Opacity" Value="1"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsVolumeChanging, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.15"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.15"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.ExitActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Viewbox.Style>
+
+                                <Grid Width="684" Height="684">
+                                    <Path Data="{Binding Volume, Converter={StaticResource VolumeToSpeakerIconConverter}}" 
+              Fill="{Binding AdaptiveTextColor}" 
+              Stretch="None" 
+              HorizontalAlignment="Left" 
+              VerticalAlignment="Center"/>
+                                </Grid>
+                            </Viewbox>
+
+                            <TextBlock Text="{Binding Volume, StringFormat='{}{0:P0}'}" 
+                                       Foreground="{Binding AdaptiveTextColor}" FontSize="12" FontWeight="Bold" 
+                                       HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Opacity" Value="0"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsVolumeChanging, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.15"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.15"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.ExitActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </Grid>
+
+                    <Border Grid.Column="1" Width="100" Height="100" CornerRadius="6" VerticalAlignment="Center">
+                        <Grid>
+                            <Border Background="#222" CornerRadius="6" 
+                Visibility="{Binding AlbumArt, Converter={StaticResource NullToVisibilityConverter}}">
+                                <TextBlock Text="&#xE189;" FontFamily="Segoe MDL2 Assets" FontSize="28" Foreground="#333" 
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <Border CornerRadius="6">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{Binding AlbumArt}" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Border.Background>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Column="2" Margin="15,5,0,5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="{Binding CurrentTrackName}" Foreground="{Binding AdaptiveTextColor}" 
+                                   FontSize="18" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
+
+                        <TextBlock Grid.Row="1" Text="{Binding ArtistName}" Foreground="{Binding AdaptiveTextColor}" 
+                                   FontSize="14" Opacity="0.7" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
+
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                            <Path Fill="{Binding AdaptiveTextColor}" Stretch="Uniform" Width="14" Height="14" Margin="0,0,15,0">
+                                <Path.Style>
+                                    <Style TargetType="Path">
+                                        <Setter Property="Data" Value="{StaticResource IconRepeatGeometry}"/>
+                                        <Setter Property="Opacity" Value="0.3"/>
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RepeatMode}" Value="All">
+                                                <Setter Property="Opacity" Value="1.0"/>
+                                                <Setter Property="Data" Value="{StaticResource IconRepeatGeometry}"/>
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding RepeatMode}" Value="One">
+                                                <Setter Property="Opacity" Value="1.0"/>
+                                                <Setter Property="Data" Value="{StaticResource IconRepeatOneGeometry}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Path.Style>
+                            </Path>
+
+                            <Path Stretch="Uniform" Width="16" Height="16" Margin="0,0,15,0" Fill="{Binding AdaptiveTextColor}">
+                                <Path.Style>
+                                    <Style TargetType="Path">
+                                        <Setter Property="Data" Value="{StaticResource IconPlayGeometry}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                                <Setter Property="Data" Value="{StaticResource IconPauseGeometry}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Path.Style>
+                            </Path>
+
+                            <Path Data="{StaticResource IconShuffleGeometry}" 
+      Fill="{Binding AdaptiveTextColor}" 
+      Stretch="Uniform" 
+      Width="16" Height="16" 
+      Opacity="{Binding IsShuffleActive, Converter={StaticResource BoolToOpacityConverter}}"/>
+                        </StackPanel>
+                    </Grid>
+
+                </Grid>
+            </Grid>
+        </Border>
+    </Border>
+    </Border>
+</Window>

@@ -1,0 +1,150 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x64</Platforms>
+    <ApplicationIcon>logoalphaicon.ico</ApplicationIcon>
+	  <Version>1.4.32</Version>
+	  <AssemblyVersion>1.4.32</AssemblyVersion>
+	  <FileVersion>1.4.32</FileVersion>
+
+	  <Description>Just Lossless Sound Audio Player</Description>
+	  <Authors>JyllyS</Authors>
+	  <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="FluidBackground.ps" />
+    <None Remove="Fonts\Comfortaa-Bold.ttf" />
+    <None Remove="Fonts\Comfortaa-Light.ttf" />
+    <None Remove="Fonts\Comfortaa-Medium.ttf" />
+    <None Remove="Fonts\Comfortaa-Regular.ttf" />
+    <None Remove="Fonts\Comfortaa-SemiBold.ttf" />
+    <None Remove="Fonts\Nunito-Black.ttf" />
+    <None Remove="Fonts\Nunito-Bold.ttf" />
+    <None Remove="Fonts\Nunito-Italic.ttf" />
+    <None Remove="Fonts\Nunito-Light.ttf" />
+    <None Remove="Fonts\Nunito-LightItalic.ttf" />
+    <None Remove="Fonts\Nunito-Medium.ttf" />
+    <None Remove="Fonts\Nunito-Regular.ttf" />
+    <None Remove="Fonts\Nunito-SemiBold.ttf" />
+    <None Remove="Fonts\Onest-Black.ttf" />
+    <None Remove="Fonts\Onest-Bold.ttf" />
+    <None Remove="Fonts\Onest-ExtraBold.ttf" />
+    <None Remove="Fonts\Onest-ExtraLight.ttf" />
+    <None Remove="Fonts\Onest-Light.ttf" />
+    <None Remove="Fonts\Onest-Medium.ttf" />
+    <None Remove="Fonts\Onest-Regular.ttf" />
+    <None Remove="Fonts\Onest-SemiBold.ttf" />
+    <None Remove="Fonts\Onest-Thin.ttf" />
+    <None Remove="Fonts\Rubik-Bold.ttf" />
+    <None Remove="Fonts\Rubik-Italic.ttf" />
+    <None Remove="Fonts\Rubik-Light.ttf" />
+    <None Remove="Fonts\Rubik-LightItalic.ttf" />
+    <None Remove="Fonts\Rubik-Medium.ttf" />
+    <None Remove="Fonts\Rubik-Regular.ttf" />
+    <None Remove="Fonts\Rubik-SemiBold.ttf" />
+    <None Remove="logo.png" />
+    <None Remove="logoalphaicon.ico" />
+    <None Remove="logoui.png" />
+    <None Remove="logouitop.png" />
+    <None Remove="noise.png" />
+    <None Remove="resources\noise.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="H.NotifyIcon.Wpf" Version="2.4.1" />
+    <PackageReference Include="ManagedBass" Version="4.0.2" />
+    <PackageReference Include="ManagedBass.Asio" Version="4.0.2" />
+    <PackageReference Include="ManagedBass.Flac" Version="4.0.2" />
+    <PackageReference Include="ManagedBass.Mix" Version="4.0.2" />
+    <PackageReference Include="ManagedBass.Wasapi" Version="4.0.2" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.12" />
+    <PackageReference Include="SourceGear.sqlite3" Version="3.53.4" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
+    <PackageReference Include="TagLibSharp" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="FluidBackground.ps" />
+    <Resource Include="Fonts\Comfortaa-Bold.ttf" />
+    <Resource Include="Fonts\Comfortaa-Light.ttf" />
+    <Resource Include="Fonts\Comfortaa-Medium.ttf" />
+    <Resource Include="Fonts\Comfortaa-Regular.ttf" />
+    <Resource Include="Fonts\Comfortaa-SemiBold.ttf" />
+    <Resource Include="Fonts\Nunito-Black.ttf" />
+    <Resource Include="Fonts\Onest-Black.ttf" />
+    <Resource Include="Fonts\Onest-Bold.ttf" />
+    <Resource Include="Fonts\Onest-ExtraBold.ttf" />
+    <Resource Include="Fonts\Onest-ExtraLight.ttf" />
+    <Resource Include="Fonts\Onest-Light.ttf" />
+    <Resource Include="Fonts\Onest-Medium.ttf" />
+    <Resource Include="Fonts\Onest-Regular.ttf" />
+    <Resource Include="Fonts\Onest-SemiBold.ttf" />
+    <Resource Include="Fonts\Onest-Thin.ttf" />
+    <Resource Include="logo.png" />
+    <Resource Include="logoalphaicon.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="logoui.png" />
+    <Resource Include="logouitop.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </ApplicationDefinition>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="bass.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="bassalac.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="bassape.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="bassasio.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="bassflac.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="bassmix.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="basswasapi.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="basswma.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="bass_aac.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="resources\" />
+  </ItemGroup>
+
+</Project>

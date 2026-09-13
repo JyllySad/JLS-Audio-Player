@@ -1,0 +1,2166 @@
+<UserControl x:Class="JLS.Views.FileBrowserView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:JLS.Converters"
+             xmlns:local="clr-namespace:JLS.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="Transparent">
+    <UserControl.Resources>
+        <converters:DirectoryToIconConverter x:Key="DirectoryToIconConverter"/>
+        <converters:ColorToContrastBrushConverter x:Key="ColorToContrastBrushConverter"/>
+        <converters:SubfolderToCoverConverter x:Key="SubfolderToCoverConverter"/>
+        <converters:CleanDurationConverter x:Key="CleanDurationConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+        <ContextMenu x:Key="BulkContextMenu">
+            <MenuItem Header="Add all to Playlist" ItemsSource="{Binding PlaylistManager.Playlists}">
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                        <Setter Property="Header" Value="{Binding Name}"/>
+                        <EventSetter Event="Click" Handler="BulkAddToPlaylistMenuItem_Click"/>
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+                <MenuItem.Icon>
+                    <Path Data="m 48.3,733.4 c -3.9,-1.4 -9,-3.8 -11.5,-5.3 -6.1,-3.8 -16,-14.6 -19.4,-21.2 -7.2,-14 -6.8,4.5 -6.8,-333.6 0,-278.4 0.2,-313.6 2.1,-320.7 C 17,36.3 27.2,23.9 42.5,16.3 L 52.5,11.3 369.9,11 c 353.1,-0.4 323.9,-1.2 339,8.9 10.1,6.7 18.4,17.9 21.8,29.3 2.6,8.7 2.7,12.2 2.3,327.5 -0.4,318.7 -0.4,318.7 -4.5,327.4 -5.5,11.6 -15.5,21.6 -26.8,27 -9,4.3 -9,4.3 -327.7,4.6 -310.3,0.3 -318.9,0.2 -325.7,-2.2 z M 688.4,702.2 c 5.7,-2.4 12.6,-10.4 13.6,-15.8 0.4,-2.4 0.6,-144.9 0.4,-316.6 C 702,57.6 702,57.6 697.9,52.5 695.7,49.6 691.8,46.3 689.2,45 684.9,42.8 667.1,42.7 373,42.7 114.2,42.7 60.5,43 56.9,44.5 51.2,46.9 44.4,54.8 42.7,61.2 41.7,64.8 41.4,162.8 41.7,377.1 42,687.8 42,687.8 46,693.4 c 2.2,3.1 6.1,6.8 8.6,8.1 C 59.1,703.9 70.1,704 371.7,704 c 259.4,0 313.1,-0.3 316.7,-1.8 z M 471.2,621.3 c -6.5,-2 -16.6,-9.4 -21.3,-15.6 -18.1,-23.8 2.2,-59.1 34,-59.3 4.9,0 10.2,0.4 11.9,0.9 3,0.9 3,0.9 3,-65.7 0,-66.7 0,-66.7 3.4,-70.7 2.5,-2.9 6.3,-5 13.7,-7.4 5.6,-1.8 32.4,-10.8 59.4,-20 27,-9.2 51.1,-16.7 53.5,-16.7 5.7,0 10.9,4.3 12.7,10.4 1,3.4 1.3,32.4 1,92.3 C 642,556.7 642,556.7 638.5,564.1 c -4.9,10.6 -10.8,16.6 -21,21.6 -7.8,3.9 -10.1,4.4 -19.6,4.3 -12.5,-0.1 -19.9,-2.8 -28.6,-10.7 C 560.5,571.2 558,565.3 558,552 c 0,-9.2 0.6,-12.4 3,-16.9 9.4,-17.6 30.2,-26.3 50,-20.9 2.2,0.6 2.3,-2.6 2.3,-54.8 0,-30.5 -0.5,-55.4 -1,-55.3 -0.6,0.1 -19.9,6.5 -43,14.3 l -42,14.2 -0.4,79.9 c -0.4,79.2 -0.4,80 -3.3,86 -3.8,7.9 -12.2,16.1 -20.4,20.1 -7.3,3.5 -24.6,5 -32.2,2.6 z M 109.8,490.1 c -2.3,-1 -5.3,-3.4 -6.5,-5.3 -2.9,-4.5 -2.9,-13 0,-17.5 5,-7.6 -3.4,-7.3 180,-6.9 168.6,0.3 168.6,0.3 172,3.6 1.9,1.8 4.1,5.5 4.9,8.2 1.2,4.2 1.1,5.8 -1,10.1 -5.2,10.6 8.7,9.8 -178.5,9.7 -138.7,0 -167.4,-0.4 -170.9,-1.9 z m -4,-114.5 c -4.1,-3.8 -4.9,-5.3 -5,-10.5 -0.2,-7.2 2.1,-11.9 7.2,-14.9 3.5,-2 17.4,-2.2 173.6,-2.2 151.7,0 170.1,0.2 172.8,2.1 6.5,4.6 8.8,14.5 4.9,22 -4.4,8.5 6.8,8 -179.3,8 -169.4,0 -169.4,0 -174.3,-4.4 z m 4.2,-108.1 c -5.7,-2.5 -8.6,-7.5 -8.6,-14.9 0,-5.3 0.7,-6.9 4.5,-10.7 4.5,-4.5 4.5,-4.5 257.2,-4.5 252.7,0 252.7,0 256.8,3.4 9.2,7.7 7.6,21.4 -3.1,26.5 -4,1.9 -28.8,2.1 -253.6,2.1 -204,0 -249.9,-0.4 -253.2,-1.8 z m -2.1,-112.1 c -1.9,-1 -4.5,-4.1 -5.8,-6.7 -3,-6.2 -1.8,-12.6 3.2,-18.3 C 109.1,126 109.1,126 361.6,125.7 c 200.3,-0.3 253.1,0 255.7,1.4 4.3,2.2 9.4,9.8 9.4,14 0,5.2 -4,12.3 -8.1,14.4 -5.6,2.9 -505.4,2.8 -510.7,-0.1 z"
+          Fill="White"
+          Stretch="Uniform"
+          Width="16"
+          Height="16"
+          VerticalAlignment="Center"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="Edit Tags for All Files" Click="BulkEditTagsMenuItem_Click">
+                <MenuItem.Icon>
+                    <TextBlock Text="&#xE70F;" FontFamily="Segoe MDL2 Assets" Foreground="White" VerticalAlignment="Center"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+
+        <ContextMenu x:Key="ColumnHeaderContextMenu">
+            <MenuItem Header="Show/Hide Columns" IsEnabled="False" FontWeight="Bold"/>
+            <Separator/>
+        </ContextMenu>
+
+        <Style TargetType="TreeViewItem">
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="Transparent"/>
+            </Style.Resources>
+
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#E0E0E0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="{Binding DataContext.ActualTreeFontSize, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="4,1,0,1"/>
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+            <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TreeViewItem">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Border x:Name="Bd" 
+        Background="{TemplateBinding Background}" 
+        CornerRadius="6" 
+        Padding="{Binding DataContext.ActualTreePadding, RelativeSource={RelativeSource AncestorType=Window}}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ToggleButton x:Name="Expander" 
+                                                  IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  ClickMode="Press">
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ToggleButton">
+                                                            <Border Background="Transparent" Width="20" Height="20">
+                                                                <Path x:Name="Arrow" Data="M 0,0 L 4,4 L 0,8 Z" Fill="#666" 
+                                                                      HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                    <Path.RenderTransform>
+                                                                        <RotateTransform Angle="0" CenterX="2" CenterY="4"/>
+                                                                    </Path.RenderTransform>
+                                                                </Path>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsChecked" Value="True">
+                                                                    <Setter TargetName="Arrow" Property="RenderTransform">
+                                                                        <Setter.Value>
+                                                                            <RotateTransform Angle="45" CenterX="2" CenterY="4"/>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                    <Setter TargetName="Arrow" Property="Fill" Value="#AAA"/>
+                                                                </Trigger>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="Arrow" Property="Fill" Value="White"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
+
+                                    <ContentPresenter Grid.Column="1" ContentSource="Header" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+
+                            <Grid x:Name="ItemsHostWrapper" Grid.Row="1" Margin="18,0,0,0" Visibility="Collapsed" Opacity="0">
+                                <Grid.LayoutTransform>
+                                    <ScaleTransform x:Name="ItemsHostScale" ScaleY="0"/>
+                                </Grid.LayoutTransform>
+                                <ItemsPresenter x:Name="ItemsHost"/>
+                            </Grid>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsExpanded" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ItemsHostWrapper" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                            </ObjectAnimationUsingKeyFrames>
+
+                                            <DoubleAnimation Storyboard.TargetName="ItemsHostScale" 
+                                     Storyboard.TargetProperty="ScaleY" 
+                                     To="1" Duration="0:0:0.25">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut"/>
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+
+                                            <DoubleAnimation Storyboard.TargetName="ItemsHostWrapper" 
+                                     Storyboard.TargetProperty="Opacity" 
+                                     To="1" Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ItemsHostScale" 
+                             Storyboard.TargetProperty="ScaleY" 
+                             To="0" Duration="0:0:0.2">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut"/>
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+
+                                            <DoubleAnimation Storyboard.TargetName="ItemsHostWrapper" 
+                             Storyboard.TargetProperty="Opacity" 
+                             To="0" Duration="0:0:0.2"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ItemsHostWrapper" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Collapsed}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+
+                            <Trigger Property="HasItems" Value="False">
+                                <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
+                            </Trigger>
+
+                            <Trigger SourceName="Bd" Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#25252A"/>
+                            </Trigger>
+
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{Binding DataContext.DarkColor, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                <Setter Property="Foreground" Value="{Binding DataContext.LightColor, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <HierarchicalDataTemplate DataType="{x:Type local:TreeViewNode}" ItemsSource="{Binding Children}">
+            <StackPanel Orientation="Horizontal">
+
+                <Path x:Name="FolderIcon" 
+              Fill="#E0E0E0" 
+              Width="18" Height="18" 
+              Stretch="Uniform" 
+              Margin="0,0,8,0" 
+              VerticalAlignment="Center">
+                    <Path.Style>
+                        <Style TargetType="Path">
+                            <Setter Property="Data" Value="m136.6,593.1 c-18.3,-6.5 -32.1,-22.6 -35.7,-41.5 -1.1,-5.8 -1.4,-60.2 -1.1,-200 0.4,-192 0.4,-192 3.9,-199.3 7.2,-15.2 19.5,-26.2 34.4,-30.7 8.6,-2.6 11.8,-2.7 86.9,-2.3 77,0.4 78,0.4 84.3,3.3 10.6,4.9 19.4,14.5 28.3,30.9 l8,14.7 131.3,0.4 c122.2,0.4 131.8,0.6 137.3,2.8 15.3,6.1 27.5,18.9 32.8,34.6 2.2,6.6 2.4,18.2 2.4,177 0.1,170 0.1,170 -2.9,177.3 -6.1,15 -20,28.8 -32.9,32.7 -5.7,1.7 -37.3,2 -239.3,1.9 -188,0 -233.7,-0.4 -237.6,-1.8 z M604.9,568.1 c2.5,-0.8 6.8,-3.6 9.5,-6.3 9.6,-9.2 9.1,-0.3 8.7,-150.2 -0.4,-133.6 -0.4,-134.7 -3.2,-140 -1.5,-2.9 -5.3,-7.1 -8.4,-9.3 -5.7,-4 -5.7,-4 -117.2,-4.7 -111.6,-0.7 -111.6,-0.7 -119.6,-4.4 -15.4,-7.2 -19.6,-13 -48.7,-66.9 -8.3,-15.4 -16.5,-30 -18.3,-32.3 -6.5,-8.7 -3,-8.4 -88.3,-8 -77.2,0.4 -77.2,0.4 -82.3,4.5 -2.8,2.3 -6.3,6.2 -7.8,8.7 -2.6,4.5 -2.7,7.2 -3,195 -0.2,133.5 0.1,192.1 1.1,195.8 1.8,6.9 9.7,15.3 16.6,17.7 4.5,1.6 39.9,1.9 230.8,1.9 164.5,0 226.7,-0.3 230,-1.5 z m18.3,-343.1 c-0.5,-11.4 -0.9,-13.2 -4.5,-18.3 -2.2,-3.1 -6.4,-7 -9.3,-8.7 -5.3,-3 -5.3,-3 -126.9,-3 -66.9,0 -121.7,0.2 -121.7,0.4 0,2.6 16.3,30 19.1,32.1 3.7,2.8 4.5,2.8 116.7,3.5 112.4,0.7 112.9,0.7 118.9,3.6 3.3,1.6 6.5,2.9 7.2,3 0.6,0.1 0.9,-5.6 0.6,-12.5 z" />
+                        </Style>
+                    </Path.Style>
+                </Path>
+
+                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <HierarchicalDataTemplate.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsExpanded}" Value="True"/>
+                        <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Path=HasItems}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="FolderIcon" Property="Data" Value="M84.5,602.1C72.4,598.3 62.1,588.4 56.8,575.5 54,568.7 54,568.4 53.6,380 53.4,252.4 53.7,188.4 54.6,182.2 57.3,165.2 67.5,151.2 82.4,144.2 90,140.7 90,140.7 183.4,140.7c93.4,0 93.4,0 102.2,4.3 11.5,5.7 15.7,10.5 29.8,34.5 12.6,21.4 15.5,25.3 20.7,27.7 2.4,1.1 38.7,1.7 128.7,2.2C590,210 590,210 597,213.7c9.8,5.1 17.1,13 22.1,23.4 4,8.6 4.2,9.6 4.7,29.7l0.5,20.8 18.9,0.6c15.8,0.5 19.9,1.1 25.5,3.6 13.1,5.8 21,17.9 21.1,32.2 0,5.7-7.6,34.1-34.3,127.9-18.9,66.3-35.6,123-37.1,125.9-4.2,8.2-14,17.8-22.3,21.9-7.5,3.7-7.5,3.7-256.8,3.9-200.4,0.2-250.4-0.1-254.8-1.5zM585,579.3c5.8-2.4 10.5-6.5 13-11.4 1-1.9 17.1-57.4 35.9-123.3 30.7-107.9 34-120.3 32.6-124.2-3-9.1 17.9-8.4-249-8.4-268.8,0-247.1-0.8-254.5,8.9-2.6,3.5-11.4,32.5-38.6,127.5-19.3,67.6-35.2,123.8-35.2,124.7 0,1 1.5,3.2 3.3,5 3.3,3.3 3.3,3.3 245.4,3.3 215.5,0 242.6-0.2 247-2.1zM126,360c12.3-43.6 15.4-50.9 25.3-59.7 2.9-2.6 8.6-6.3 12.7-8.2 7.3-3.5 7.3-3.5 222.3-3.9l215-0.4v-17.7c0-16.4-0.3-18.2-3.4-24.6-2.2-4.4-5.2-8-8.3-9.9C584.7,232.7 584.7,232.7 459.3,232 334,231.3 334,231.3 326.4,227.6 316.1,222.5 309.9,215.1 296,191.3c-18-30.9-6.3-27.9-110.4-28.4-87.5-0.4-87.5-0.4-94.2,3-4.1,2-8.1,5.3-10.1,8.3C78,179.1 78,179.1 77.8,354.6L77.5,530 96.1,465.3C106.3,429.8 119.8,382.4 126,360Z"/>
+                </MultiDataTrigger>
+
+                <DataTrigger Binding="{Binding IsDrive}" Value="True">
+                    <Setter TargetName="FolderIcon" Property="Data" Value="M 138.7,608.0 C 111.8,604.5 86.5,585.2 74.6,559.3 67.5,543.7 67.3,541.4 67.4,462 c 0.1,-70.6 0.2,-73.7 2.9,-83.6 1.6,-5.6 16.6,-41.9 33.4,-80.7 16.8,-38.7 33.1,-76.4 36.2,-83.8 3.1,-7.3 8.3,-18.6 11.6,-25.0 11.1,-21.6 32.1,-40.2 54.7,-48.5 10.4,-3.8 10.4,-3.8 161.7,-4.2 168.8,-0.4 161.1,-0.8 180.2,8.8 21.0,10.6 35.7,25.9 46.6,48.9 16.6,34.9 75.9,167.5 77.7,173.8 4.2,14.3 5.1,33.8 4.5,103.5 -0.6,75.6 -0.6,75.7 -9.9,92.7 -11.4,20.8 -29.6,35.6 -52.1,42.3 -7.1,2.1 -23.9,2.3 -238.3,2.5 -126.9,0.1 -234.0,-0.2 -238.0,-0.8 z m 467.1,-28.7 c 16.7,-4.3 28.9,-14.1 36.2,-29.1 6.7,-13.6 7.7,-23.9 7.0,-69.8 -0.5,-33.3 -0.9,-39.4 -3.1,-45.7 -3.9,-11.4 -12.2,-22.4 -21.7,-28.9 -15.5,-10.6 5.2,-9.8 -254.9,-9.4 -232.6,0.3 -232.6,0.3 -239.9,3.8 -15.1,7.2 -26.0,19.3 -30.9,34.3 -2.6,8.0 -3.0,12.5 -3.5,45.8 -0.7,42.7 0.6,56.3 6.2,68.4 7.0,15.0 20.4,26.3 36.1,30.5 11.2,3.0 457.0,3.1 468.4,0.1 z M 531.9,504.9 c -3.6,-1.9 -7.6,-5.6 -10.2,-9.5 -3.9,-5.8 -4.3,-7.4 -4.3,-16.0 0,-12.7 4.3,-20.0 14.8,-25.2 19.7,-9.8 41.2,3.3 41.2,25.2 0,21.5 -22.6,35.5 -41.5,25.6 z M 645.5,370.5 c -2.4,-6.3 -75.2,-163.4 -79.1,-170.8 -4.7,-8.8 -16.4,-21.2 -24.9,-26.1 -3.2,-1.9 -9.9,-5.0 -14.7,-6.9 C 518,163.3 518,163.3 377.1,163.0 c -155.3,-0.4 -150.9,-0.6 -168.8,7.8 -6.5,3.1 -11.8,7.1 -19.0,14.4 -10.0,10.1 -10.0,10.1 -48.9,97.5 -21.4,48.0 -38.7,87.5 -38.4,87.8 0.2,0.2 3.3,-1.1 6.9,-2.9 3.6,-1.8 11.0,-4.7 16.5,-6.4 C 135.3,358 135.3,358 372.7,358 c 237.3,0 237.3,0 248,3.6 5.9,2.0 14.0,5.7 18,8.1 4.0,2.5 7.5,4.4 7.7,4.2 0.2,-0.2 -0.2,-1.7 -0.9,-3.5 z"/>
+                </DataTrigger>
+            </HierarchicalDataTemplate.Triggers>
+
+            <HierarchicalDataTemplate.ItemContainerStyle>
+                <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                    <EventSetter Event="Expanded" Handler="TreeViewItem_Expanded"/>
+
+                    <EventSetter Event="RequestBringIntoView" Handler="TreeViewItem_RequestBringIntoView"/>
+
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                    <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu>
+                                <MenuItem Header="Show folder in Explorer" 
+              Command="{Binding PlacementTarget.Tag.OpenInExplorerCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+              CommandParameter="{Binding FullPath}">
+                                    <MenuItem.Icon>
+                                        <Path Data="M84.5,602.1C72.4,598.3 62.1,588.4 56.8,575.5 54,568.7 54,568.4 53.6,380 53.4,252.4 53.7,188.4 54.6,182.2 57.3,165.2 67.5,151.2 82.4,144.2 90,140.7 90,140.7 183.4,140.7c93.4,0 93.4,0 102.2,4.3 11.5,5.7 15.7,10.5 29.8,34.5 12.6,21.4 15.5,25.3 20.7,27.7 2.4,1.1 38.7,1.7 128.7,2.2C590,210 590,210 597,213.7c9.8,5.1 17.1,13 22.1,23.4 4,8.6 4.2,9.6 4.7,29.7l0.5,20.8 18.9,0.6c15.8,0.5 19.9,1.1 25.5,3.6 13.1,5.8 21,17.9 21.1,32.2 0,5.7-7.6,34.1-34.3,127.9-18.9,66.3-35.6,123-37.1,125.9-4.2,8.2-14,17.8-22.3,21.9-7.5,3.7-7.5,3.7-256.8,3.9-200.4,0.2-250.4-0.1-254.8-1.5zM585,579.3c5.8-2.4 10.5-6.5 13-11.4 1-1.9 17.1-57.4 35.9-123.3 30.7-107.9 34-120.3 32.6-124.2-3-9.1 17.9-8.4-249-8.4-268.8,0-247.1-0.8-254.5,8.9-2.6,3.5-11.4,32.5-38.6,127.5-19.3,67.6-35.2,123.8-35.2,124.7 0,1 1.5,3.2 3.3,5 3.3,3.3 3.3,3.3 245.4,3.3 215.5,0 242.6-0.2 247-2.1zM126,360c12.3-43.6 15.4-50.9 25.3-59.7 2.9-2.6 8.6-6.3 12.7-8.2 7.3-3.5 7.3-3.5 222.3-3.9l215-0.4v-17.7c0-16.4-0.3-18.2-3.4-24.6-2.2-4.4-5.2-8-8.3-9.9C584.7,232.7 584.7,232.7 459.3,232 334,231.3 334,231.3 326.4,227.6 316.1,222.5 309.9,215.1 296,191.3c-18-30.9-6.3-27.9-110.4-28.4-87.5-0.4-87.5-0.4-94.2,3-4.1,2-8.1,5.3-10.1,8.3C78,179.1 78,179.1 77.8,354.6L77.5,530 96.1,465.3C106.3,429.8 119.8,382.4 126,360Z" 
+          Fill="White" 
+          Stretch="Uniform" 
+          Width="16" Height="16" 
+          VerticalAlignment="Center"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Refresh" 
+              Command="{Binding PlacementTarget.Tag.RefreshCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                                    <MenuItem.Icon>
+                                        <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" Foreground="White" VerticalAlignment="Center"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </HierarchicalDataTemplate.ItemContainerStyle>
+        </HierarchicalDataTemplate>
+
+
+    </UserControl.Resources>
+
+    <Grid Background="#1E1E1E">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="LeftColumn" Width="220" MinWidth="150"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*" MinWidth="300"/>
+        </Grid.ColumnDefinitions>
+
+        <Border x:Name="SidebarContainer" Grid.Column="0" Background="#181818" BorderBrush="#2D2D30" BorderThickness="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TreeView x:Name="FoldersTreeView" ItemsSource="{Binding DriveNodes}" 
+                          SelectedItemChanged="TreeView_SelectedItemChanged"
+                          Background="Transparent" BorderThickness="0"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          VirtualizingPanel.IsVirtualizing="False">
+
+                    <TreeView.Style>
+                        <Style TargetType="TreeView">
+                            <Setter Property="Grid.Row" Value="1"/>
+                            <Setter Property="Grid.RowSpan" Value="1"/>
+                            <Setter Property="OpacityMask" Value="{x:Null}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                    <Setter Property="Grid.Row" Value="0"/>
+                                    <Setter Property="Grid.RowSpan" Value="2"/>
+                                    <Setter Property="OpacityMask">
+                                        <Setter.Value>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="Transparent" Offset="0.0" />
+                                                <GradientStop Color="Black" Offset="0.08" />
+                                                <GradientStop Color="Black" Offset="0.85" />
+                                                <GradientStop Color="Transparent" Offset="1.0" />
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TreeView.Style>
+
+                    <TreeView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel>
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Margin" Value="0"/>
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True"/>
+                                                    <Condition Binding="{Binding DataContext.IsMinimalBottomPanelEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="False"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Margin" Value="0,52,0,200"/>
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True"/>
+                                                    <Condition Binding="{Binding DataContext.IsMinimalBottomPanelEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Margin" Value="0,52,0,110"/>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+                            </StackPanel>
+                        </ItemsPanelTemplate>
+                    </TreeView.ItemsPanel>
+
+                    <TreeView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Refresh" Command="{Binding RefreshAllCommand}">
+                                <MenuItem.Icon>
+                                    <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" Foreground="White" VerticalAlignment="Center"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </TreeView.ContextMenu>
+
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                            <EventSetter Event="Expanded" Handler="TreeViewItem_Expanded"/>
+                            <EventSetter Event="RequestBringIntoView" Handler="TreeViewItem_RequestBringIntoView"/>
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                            <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                </TreeView>
+
+                <Border Grid.Row="0" CornerRadius="16" Height="32">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="#1E1E1E"/>
+                            <Setter Property="Margin" Value="10,10,10,1"/>
+                            <Setter Property="VerticalAlignment" Value="Stretch"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="#BB2A2A2A" Offset="0.0"/>
+                                                <GradientStop Color="#99151515" Offset="1.0"/>
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                    <Setter Property="Margin" Value="10,10,18,0"/>
+                                    <Setter Property="VerticalAlignment" Value="Top"/>
+
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Grid x:Name="SearchFolderRootGrid" CacheMode="BitmapCache">
+
+                        <Grid.OpacityMask>
+                            <VisualBrush>
+                                <VisualBrush.Visual>
+                                    <Border Background="Black" CornerRadius="16"
+                        Width="{Binding ActualWidth, ElementName=SearchFolderRootGrid}" 
+                        Height="{Binding ActualHeight, ElementName=SearchFolderRootGrid}"/>
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Grid.OpacityMask>
+
+                        
+
+                        <Grid.Triggers>
+                            <EventTrigger RoutedEvent="GotKeyboardFocus">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="FolderSearchHighlight" 
+                                     Storyboard.TargetProperty="Opacity" 
+                                     To="0.08" Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <QuadraticEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="LostKeyboardFocus">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="FolderSearchHighlight" 
+                                     Storyboard.TargetProperty="Opacity" 
+                                     To="0" Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <QuadraticEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Grid.Triggers>
+
+                        <Border IsHitTestVisible="False" CornerRadius="15" BorderThickness="1,1,1,0" Panel.ZIndex="10">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                            <Setter Property="BorderBrush">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                        <GradientStop Color="#44FFFFFF" Offset="0.0" />
+                                                        <GradientStop Color="#05FFFFFF" Offset="0.4" />
+                                                        <GradientStop Color="#00FFFFFF" Offset="1.0" />
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+
+                        <Border x:Name="FolderSearchHighlight" Background="White" Opacity="0" CornerRadius="16" IsHitTestVisible="False"/>
+
+                        <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" Foreground="#888" VerticalAlignment="Center" Margin="8,0,0,0"/>
+
+                        <TextBox x:Name="SearchFolderBox" Text="{Binding SearchFolderText, UpdateSourceTrigger=PropertyChanged}" 
+                                 Background="Transparent" Foreground="White" BorderThickness="0" 
+                                 Padding="30,6,30,6" VerticalContentAlignment="Center" FontWeight="SemiBold"
+                                 TextChanged="SearchBox_TextChanged"/>
+
+                        <Button x:Name="ClearFolderBtn" Content="&#xE894;" FontFamily="Segoe MDL2 Assets" 
+                                Background="Transparent" BorderThickness="0" Cursor="Hand"
+                                HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,6,0"
+                                Opacity="0" Visibility="Collapsed" Click="ClearSearchBtn_Click">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="Transparent" Padding="4">
+                                        <TextBlock x:Name="Icon" Text="{TemplateBinding Content}" FontFamily="{TemplateBinding FontFamily}" 
+                                                   RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock.Foreground>
+                                                <SolidColorBrush Color="#888888"/>
+                                            </TextBlock.Foreground>
+                                            <TextBlock.RenderTransform>
+                                                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                            </TextBlock.RenderTransform>
+                                        </TextBlock>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" To="White" Duration="0:0:0.15"/>
+                                                    <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.2" Duration="0:0:0.15">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <QuadraticEase EasingMode="EaseOut"/>
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                    <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.2" Duration="0:0:0.15">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <QuadraticEase EasingMode="EaseOut"/>
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" To="#888888" Duration="0:0:0.15"/>
+                                                    <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1" Duration="0:0:0.15">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <QuadraticEase EasingMode="EaseOut"/>
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                    <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.15">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <QuadraticEase EasingMode="EaseOut"/>
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+
+                                        <EventTrigger RoutedEvent="PreviewMouseDown">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="0.8" Duration="0:0:0.05"/>
+                                                    <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="0.8" Duration="0:0:0.05"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+
+                                        <EventTrigger RoutedEvent="PreviewMouseUp">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.2" Duration="0:0:0.15">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <QuadraticEase EasingMode="EaseOut"/>
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                    <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.2" Duration="0:0:0.15">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <QuadraticEase EasingMode="EaseOut"/>
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <GridSplitter x:Name="BrowserSplitter" Grid.Column="1" Width="4" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+              Background="#181818" BorderBrush="Transparent" BorderThickness="0"
+              ShowsPreview="True" ResizeBehavior="PreviousAndNext"/>
+
+        <Grid x:Name="MainContentGrid" Grid.Column="2">
+
+            <Grid x:Name="ClassicViewContainer">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsAlbumViewEnabled}" Value="False">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Border Background="#181818"/>
+
+                    <Border Background="#252525" Padding="15,10" x:Name="HeaderContainer" CornerRadius="20,0,0,0">
+                        <Grid>
+                            <Grid.Resources>
+                                <Style x:Key="CircleActionBtnStyle" TargetType="Button">
+                                    <Setter Property="Width" Value="32"/>
+                                    <Setter Property="Height" Value="32"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Foreground" Value="#E0E0E0"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid RenderTransformOrigin="0.5,0.5">
+                                                    <Grid.RenderTransform>
+                                                        <ScaleTransform ScaleX="1" ScaleY="1" x:Name="BtnScale"/>
+                                                    </Grid.RenderTransform>
+
+                                                    <Ellipse x:Name="BgEllipse" Fill="#FFFFFF" Opacity="0.08"/>
+
+                                                    <Ellipse x:Name="StrokeEllipse" Fill="Transparent"/>
+
+                                                    <Ellipse x:Name="PressedOverlay" Fill="#20000000" Opacity="0"/>
+
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Grid>
+
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Foreground" Value="White"/>
+                                                    </Trigger>
+
+                                                    <EventTrigger RoutedEvent="MouseEnter">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetName="BgEllipse" Storyboard.TargetProperty="Opacity" To="0.25" Duration="0:0:0.15"/>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleX" To="1.15" Duration="0:0:0.15">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleY" To="1.15" Duration="0:0:0.15">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+
+                                                    <EventTrigger RoutedEvent="MouseLeave">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetName="BgEllipse" Storyboard.TargetProperty="Opacity" To="0.08" Duration="0:0:0.15"/>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.15">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.15">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+
+                                                    <EventTrigger RoutedEvent="PreviewMouseDown">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetName="PressedOverlay" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05"/>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleX" To="0.95" Duration="0:0:0.05"/>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleY" To="0.95" Duration="0:0:0.05"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <EventTrigger RoutedEvent="PreviewMouseUp">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetName="PressedOverlay" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.15"/>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleX" To="1.15" Duration="0:0:0.15">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleY" To="1.15" Duration="0:0:0.15">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <DataTrigger Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                        <Setter TargetName="StrokeEllipse" Property="StrokeThickness" Value="1"/>
+                                                        <Setter TargetName="StrokeEllipse" Property="Stroke">
+                                                            <Setter.Value>
+                                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                    <GradientStop Color="#44FFFFFF" Offset="0.0" />
+                                                                    <GradientStop Color="#05FFFFFF" Offset="0.4" />
+                                                                    <GradientStop Color="#00FFFFFF" Offset="1.0" />
+                                                                </LinearGradientBrush>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Grid.Resources>
+
+                            <Grid x:Name="NormalHeader">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0" Click="ToggleSidebarBtn_Click" Style="{StaticResource CircleActionBtnStyle}" Margin="0,0,10,0" ToolTip="Expand/Collapse Sidebar">
+                                    <TextBlock x:Name="ToggleSidebarIcon" Text="&#xE76B;" FontFamily="Segoe MDL2 Assets" FontSize="14" FontWeight="Bold" RenderTransformOrigin="0.5,0.5">
+                                        <TextBlock.RenderTransform>
+                                            <RotateTransform Angle="0"/>
+                                        </TextBlock.RenderTransform>
+                                    </TextBlock>
+                                </Button>
+
+                                <Grid Grid.Column="1" x:Name="HideableSearchHeader">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button x:Name="OpenSearchBtn" Grid.Column="0" Click="OpenSearchBtn_Click" Style="{StaticResource CircleActionBtnStyle}" ToolTip="Search Files" Margin="0,0,10,0">
+                                        <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="12" FontWeight="Bold"/>
+                                    </Button>
+
+                                    <Border Grid.Column="1" CornerRadius="16">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#1E1E1E"/>
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                        <Setter Property="Background">
+                                                            <Setter.Value>
+                                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                    <GradientStop Color="#BB2A2A2A" Offset="0.0"/>
+                                                                    <GradientStop Color="#99151515" Offset="1.0"/>
+                                                                </LinearGradientBrush>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                        <Setter Property="BorderBrush">
+                                                            <Setter.Value>
+                                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                    <GradientStop Color="#44FFFFFF" Offset="0.0" />
+                                                                    <GradientStop Color="#05FFFFFF" Offset="0.4" />
+                                                                    <GradientStop Color="#00FFFFFF" Offset="1.0" />
+                                                                </LinearGradientBrush>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBox Text="{Binding CurrentFolderPath, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Background="Transparent" Foreground="White" BorderThickness="0"
+                                                 Padding="6,4" VerticalContentAlignment="Center" IsReadOnly="True"
+                                                 FontWeight="SemiBold"/>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+
+                            <Border x:Name="SearchOverlay" CornerRadius="16" HorizontalAlignment="Left" Width="32" Opacity="0" Visibility="Collapsed" Margin="42,0,0,0">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="#181818"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                <Setter Property="Background">
+                                                    <Setter.Value>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                            <GradientStop Color="#EE2A2A2A" Offset="0.0"/>
+                                                            <GradientStop Color="#CC151515" Offset="1.0"/>
+                                                        </LinearGradientBrush>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="BorderThickness" Value="1"/>
+                                                <Setter Property="BorderBrush">
+                                                    <Setter.Value>
+                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                            <GradientStop Color="#44FFFFFF" Offset="0.0" />
+                                                            <GradientStop Color="#05FFFFFF" Offset="0.4" />
+                                                            <GradientStop Color="#00FFFFFF" Offset="1.0" />
+                                                        </LinearGradientBrush>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="32"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="32"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="&#xE721;" FontFamily="Segoe MDL2 Assets" Foreground="#666" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False"/>
+
+                                    <TextBox x:Name="SearchFileBox" Grid.Column="1" Text="{Binding SearchFileText, UpdateSourceTrigger=PropertyChanged}" 
+                 Background="Transparent" Foreground="White" BorderThickness="0" 
+                 Padding="4,6" VerticalContentAlignment="Center" FontWeight="SemiBold"
+                 LostFocus="SearchFileBox_LostFocus"/>
+
+                                    <Button x:Name="CloseSearchBtn" Grid.Column="2" Content="&#xE894;" FontFamily="Segoe MDL2 Assets" 
+                Background="Transparent" BorderThickness="0" Cursor="Hand" Width="24" Height="24"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,4,0"
+                Click="CloseSearchBtn_Click" ToolTip="Close Search">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="Transparent" Padding="4">
+                                                    <TextBlock x:Name="Icon" Text="{TemplateBinding Content}" FontFamily="{TemplateBinding FontFamily}" 
+                                               RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                        <TextBlock.Foreground>
+                                                            <SolidColorBrush Color="#888888"/>
+                                                        </TextBlock.Foreground>
+                                                        <TextBlock.RenderTransform>
+                                                            <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                                        </TextBlock.RenderTransform>
+                                                    </TextBlock>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <EventTrigger RoutedEvent="MouseEnter">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" To="White" Duration="0:0:0.15"/>
+                                                                <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.2" Duration="0:0:0.15"/>
+                                                                <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.2" Duration="0:0:0.15"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <EventTrigger RoutedEvent="MouseLeave">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" To="#888888" Duration="0:0:0.15"/>
+                                                                <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1" Duration="0:0:0.15"/>
+                                                                <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.15"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <Border Grid.Row="1" Background="Transparent" Padding="15,4" BorderBrush="Transparent" BorderThickness="0,0,0,0">
+                    <TextBlock Text="{Binding FolderStats}" Foreground="#888" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                </Border>
+
+                <ListView x:Name="FilesListView" Grid.Row="2" ItemsSource="{Binding Files}" SelectedItem="{Binding SelectedFile}"
+                          Background="#1E1E1E" BorderThickness="0"
+                          AlternationCount="2"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          MouseDoubleClick="ListView_MouseDoubleClick"
+                          GridViewColumnHeader.Click="GridViewColumnHeader_Click"
+                          PreviewMouseRightButtonUp="ListView_PreviewMouseRightButtonUp">
+
+                    
+
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel>
+                                <VirtualizingStackPanel.Style>
+                                    <Style TargetType="VirtualizingStackPanel">
+                                        <Setter Property="Margin" Value="0"/>
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True"/>
+                                                    <Condition Binding="{Binding DataContext.IsMinimalBottomPanelEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="False"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Margin" Value="0,0,0,200"/>
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True"/>
+                                                    <Condition Binding="{Binding DataContext.IsMinimalBottomPanelEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Margin" Value="0,0,0,110"/>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </VirtualizingStackPanel.Style>
+                            </VirtualizingStackPanel>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource FilesListViewItem}">
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Opacity" Value="0.85"/>
+
+                            <Setter Property="FontSize" Value="{Binding DataContext.ActualListFontSize, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                            <Setter Property="Height" Value="{Binding DataContext.ActualListHeight, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                            <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <ContextMenu>
+                                        <MenuItem Header="Add to Playlist" 
+              ItemsSource="{Binding PlacementTarget.Tag.PlaylistManager.Playlists, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                                            
+                                            <MenuItem.Style>
+                                                <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </MenuItem.Style>
+                                            
+                                            <MenuItem.Icon>
+                                                <Path Data="m 48.3,733.4 c -3.9,-1.4 -9,-3.8 -11.5,-5.3 -6.1,-3.8 -16,-14.6 -19.4,-21.2 -7.2,-14 -6.8,4.5 -6.8,-333.6 0,-278.4 0.2,-313.6 2.1,-320.7 C 17,36.3 27.2,23.9 42.5,16.3 L 52.5,11.3 369.9,11 c 353.1,-0.4 323.9,-1.2 339,8.9 10.1,6.7 18.4,17.9 21.8,29.3 2.6,8.7 2.7,12.2 2.3,327.5 -0.4,318.7 -0.4,318.7 -4.5,327.4 -5.5,11.6 -15.5,21.6 -26.8,27 -9,4.3 -9,4.3 -327.7,4.6 -310.3,0.3 -318.9,0.2 -325.7,-2.2 z M 688.4,702.2 c 5.7,-2.4 12.6,-10.4 13.6,-15.8 0.4,-2.4 0.6,-144.9 0.4,-316.6 C 702,57.6 702,57.6 697.9,52.5 695.7,49.6 691.8,46.3 689.2,45 684.9,42.8 667.1,42.7 373,42.7 114.2,42.7 60.5,43 56.9,44.5 51.2,46.9 44.4,54.8 42.7,61.2 41.7,64.8 41.4,162.8 41.7,377.1 42,687.8 42,687.8 46,693.4 c 2.2,3.1 6.1,6.8 8.6,8.1 C 59.1,703.9 70.1,704 371.7,704 c 259.4,0 313.1,-0.3 316.7,-1.8 z M 471.2,621.3 c -6.5,-2 -16.6,-9.4 -21.3,-15.6 -18.1,-23.8 2.2,-59.1 34,-59.3 4.9,0 10.2,0.4 11.9,0.9 3,0.9 3,0.9 3,-65.7 0,-66.7 0,-66.7 3.4,-70.7 2.5,-2.9 6.3,-5 13.7,-7.4 5.6,-1.8 32.4,-10.8 59.4,-20 27,-9.2 51.1,-16.7 53.5,-16.7 5.7,0 10.9,4.3 12.7,10.4 1,3.4 1.3,32.4 1,92.3 C 642,556.7 642,556.7 638.5,564.1 c -4.9,10.6 -10.8,16.6 -21,21.6 -7.8,3.9 -10.1,4.4 -19.6,4.3 -12.5,-0.1 -19.9,-2.8 -28.6,-10.7 C 560.5,571.2 558,565.3 558,552 c 0,-9.2 0.6,-12.4 3,-16.9 9.4,-17.6 30.2,-26.3 50,-20.9 2.2,0.6 2.3,-2.6 2.3,-54.8 0,-30.5 -0.5,-55.4 -1,-55.3 -0.6,0.1 -19.9,6.5 -43,14.3 l -42,14.2 -0.4,79.9 c -0.4,79.2 -0.4,80 -3.3,86 -3.8,7.9 -12.2,16.1 -20.4,20.1 -7.3,3.5 -24.6,5 -32.2,2.6 z M 109.8,490.1 c -2.3,-1 -5.3,-3.4 -6.5,-5.3 -2.9,-4.5 -2.9,-13 0,-17.5 5,-7.6 -3.4,-7.3 180,-6.9 168.6,0.3 168.6,0.3 172,3.6 1.9,1.8 4.1,5.5 4.9,8.2 1.2,4.2 1.1,5.8 -1,10.1 -5.2,10.6 8.7,9.8 -178.5,9.7 -138.7,0 -167.4,-0.4 -170.9,-1.9 z m -4,-114.5 c -4.1,-3.8 -4.9,-5.3 -5,-10.5 -0.2,-7.2 2.1,-11.9 7.2,-14.9 3.5,-2 17.4,-2.2 173.6,-2.2 151.7,0 170.1,0.2 172.8,2.1 6.5,4.6 8.8,14.5 4.9,22 -4.4,8.5 6.8,8 -179.3,8 -169.4,0 -169.4,0 -174.3,-4.4 z m 4.2,-108.1 c -5.7,-2.5 -8.6,-7.5 -8.6,-14.9 0,-5.3 0.7,-6.9 4.5,-10.7 4.5,-4.5 4.5,-4.5 257.2,-4.5 252.7,0 252.7,0 256.8,3.4 9.2,7.7 7.6,21.4 -3.1,26.5 -4,1.9 -28.8,2.1 -253.6,2.1 -204,0 -249.9,-0.4 -253.2,-1.8 z m -2.1,-112.1 c -1.9,-1 -4.5,-4.1 -5.8,-6.7 -3,-6.2 -1.8,-12.6 3.2,-18.3 C 109.1,126 109.1,126 361.6,125.7 c 200.3,-0.3 253.1,0 255.7,1.4 4.3,2.2 9.4,9.8 9.4,14 0,5.2 -4,12.3 -8.1,14.4 -5.6,2.9 -505.4,2.8 -510.7,-0.1 z"
+          Fill="White"
+          Stretch="Uniform"
+          Width="16"
+          Height="16"
+          VerticalAlignment="Center"/>
+                                            </MenuItem.Icon>
+                                            <MenuItem.ItemContainerStyle>
+                                                <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                    <Setter Property="Header" Value="{Binding Name}"/>
+                                                    <Setter Property="IsCheckable" Value="True"/>
+                                                    <Setter Property="IsChecked">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource PlaylistTrackMultiConverter}" Mode="OneWay">
+                                                                <Binding Path="."/>
+                                                                <Binding Path="PlacementTarget.DataContext" RelativeSource="{RelativeSource AncestorType=ContextMenu}"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="Command" Value="{Binding PlacementTarget.Tag.TogglePlaylistCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                                    <Setter Property="CommandParameter">
+                                                        <Setter.Value>
+                                                            <MultiBinding Converter="{StaticResource PlaylistTrackMultiConverter}">
+                                                                <Binding Path="."/>
+                                                                <Binding Path="PlacementTarget.DataContext" RelativeSource="{RelativeSource AncestorType=ContextMenu}"/>
+                                                            </MultiBinding>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </MenuItem.ItemContainerStyle>
+                                        </MenuItem>
+
+                                        <Separator>
+                                            <Separator.Style>
+                                                <Style TargetType="Separator" BasedOn="{StaticResource {x:Static MenuItem.SeparatorStyleKey}}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Separator.Style>
+                                        </Separator>
+
+                                        <MenuItem Header="Show in Explorer" 
+              Command="{Binding PlacementTarget.Tag.OpenInExplorerCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+              CommandParameter="{Binding FullPath}">
+                                            <MenuItem.Icon>
+                                                <Path Data="M84.5,602.1C72.4,598.3 62.1,588.4 56.8,575.5 54,568.7 54,568.4 53.6,380 53.4,252.4 53.7,188.4 54.6,182.2 57.3,165.2 67.5,151.2 82.4,144.2 90,140.7 90,140.7 183.4,140.7c93.4,0 93.4,0 102.2,4.3 11.5,5.7 15.7,10.5 29.8,34.5 12.6,21.4 15.5,25.3 20.7,27.7 2.4,1.1 38.7,1.7 128.7,2.2C590,210 590,210 597,213.7c9.8,5.1 17.1,13 22.1,23.4 4,8.6 4.2,9.6 4.7,29.7l0.5,20.8 18.9,0.6c15.8,0.5 19.9,1.1 25.5,3.6 13.1,5.8 21,17.9 21.1,32.2 0,5.7-7.6,34.1-34.3,127.9-18.9,66.3-35.6,123-37.1,125.9-4.2,8.2-14,17.8-22.3,21.9-7.5,3.7-7.5,3.7-256.8,3.9-200.4,0.2-250.4-0.1-254.8-1.5zM585,579.3c5.8-2.4 10.5-6.5 13-11.4 1-1.9 17.1-57.4 35.9-123.3 30.7-107.9 34-120.3 32.6-124.2-3-9.1 17.9-8.4-249-8.4-268.8,0-247.1-0.8-254.5,8.9-2.6,3.5-11.4,32.5-38.6,127.5-19.3,67.6-35.2,123.8-35.2,124.7 0,1 1.5,3.2 3.3,5 3.3,3.3 3.3,3.3 245.4,3.3 215.5,0 242.6-0.2 247-2.1zM126,360c12.3-43.6 15.4-50.9 25.3-59.7 2.9-2.6 8.6-6.3 12.7-8.2 7.3-3.5 7.3-3.5 222.3-3.9l215-0.4v-17.7c0-16.4-0.3-18.2-3.4-24.6-2.2-4.4-5.2-8-8.3-9.9C584.7,232.7 584.7,232.7 459.3,232 334,231.3 334,231.3 326.4,227.6 316.1,222.5 309.9,215.1 296,191.3c-18-30.9-6.3-27.9-110.4-28.4-87.5-0.4-87.5-0.4-94.2,3-4.1,2-8.1,5.3-10.1,8.3C78,179.1 78,179.1 77.8,354.6L77.5,530 96.1,465.3C106.3,429.8 119.8,382.4 126,360Z" 
+          Fill="White" 
+          Stretch="Uniform" 
+          Width="16" Height="16" 
+          VerticalAlignment="Center"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+
+                                        
+
+                                        <MenuItem Header="Refresh" 
+              Command="{Binding PlacementTarget.Tag.RefreshCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                                            <MenuItem.Icon>
+                                                <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" Foreground="White" VerticalAlignment="Center"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+
+                                        <MenuItem Header="Track Information" 
+CommandParameter="{Binding FullPath}">
+                                            <MenuItem.Icon>
+                                                <TextBlock Text="&#xE946;" FontFamily="Segoe MDL2 Assets" Foreground="White" VerticalAlignment="Center"/>
+                                            </MenuItem.Icon>
+                                            <MenuItem.Style>
+                                                <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                    <EventSetter Event="MenuItem.Click" Handler="TrackInfoMenuItem_Click"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </MenuItem.Style>
+                                        </MenuItem>
+
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Opacity" Value="1.0"/>
+                                    <Setter Property="FontWeight" Value="ExtraBold"/>
+                                </Trigger>
+
+                                <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                    <Setter Property="Opacity" Value="1.0"/>
+                                </DataTrigger>
+
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}" Value="1"/>
+                                        <Condition Binding="{Binding DataContext.SelectedBrowserAlternatingStyle, RelativeSource={RelativeSource AncestorType=Window}}" Value="{x:Static local:BrowserAlternatingStyle.Rows}"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Background" Value="#06FFFFFF"/>
+                                </MultiDataTrigger>
+
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}" Value="1"/>
+                                        <Condition Binding="{Binding DataContext.SelectedBrowserAlternatingStyle, RelativeSource={RelativeSource AncestorType=Window}}" Value="{x:Static local:BrowserAlternatingStyle.Both}"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Background" Value="#06FFFFFF"/>
+                                </MultiDataTrigger>
+
+                                <DataTrigger Binding="{Binding DataContext.IsShowingFoldersOnly, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True">
+                                    <Setter Property="Height" Value="70"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListViewItem">
+                                                <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="6" Padding="15,10" Margin="4,2">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Border Width="46" Height="46" CornerRadius="6" Margin="0,0,15,0" Background="#1AFFFFFF">
+                                                            <Path Data="m136.6,593.1 c-18.3,-6.5 -32.1,-22.6 -35.7,-41.5 -1.1,-5.8 -1.4,-60.2 -1.1,-200 0.4,-192 0.4,-192 3.9,-199.3 7.2,-15.2 19.5,-26.2 34.4,-30.7 8.6,-2.6 11.8,-2.7 86.9,-2.3 77,0.4 78,0.4 84.3,3.3 10.6,4.9 19.4,14.5 28.3,30.9 l8,14.7 131.3,0.4 c122.2,0.4 131.8,0.6 137.3,2.8 15.3,6.1 27.5,18.9 32.8,34.6 2.2,6.6 2.4,18.2 2.4,177 0.1,170 0.1,170 -2.9,177.3 -6.1,15 -20,28.8 -32.9,32.7 -5.7,1.7 -37.3,2 -239.3,1.9 -188,0 -233.7,-0.4 -237.6,-1.8 z M604.9,568.1 c2.5,-0.8 6.8,-3.6 9.5,-6.3 9.6,-9.2 9.1,-0.3 8.7,-150.2 -0.4,-133.6 -0.4,-134.7 -3.2,-140 -1.5,-2.9 -5.3,-7.1 -8.4,-9.3 -5.7,-4 -5.7,-4 -117.2,-4.7 -111.6,-0.7 -111.6,-0.7 -119.6,-4.4 -15.4,-7.2 -19.6,-13 -48.7,-66.9 -8.3,-15.4 -16.5,-30 -18.3,-32.3 -6.5,-8.7 -3,-8.4 -88.3,-8 -77.2,0.4 -77.2,0.4 -82.3,4.5 -2.8,2.3 -6.3,6.2 -7.8,8.7 -2.6,4.5 -2.7,7.2 -3,195 -0.2,133.5 0.1,192.1 1.1,195.8 1.8,6.9 9.7,15.3 16.6,17.7 4.5,1.6 39.9,1.9 230.8,1.9 164.5,0 226.7,-0.3 230,-1.5 z m18.3,-343.1 c-0.5,-11.4 -0.9,-13.2 -4.5,-18.3 -2.2,-3.1 -6.4,-7 -9.3,-8.7 -5.3,-3 -5.3,-3 -126.9,-3 -66.9,0 -121.7,0.2 -121.7,0.4 0,2.6 16.3,30 19.1,32.1 3.7,2.8 4.5,2.8 116.7,3.5 112.4,0.7 112.9,0.7 118.9,3.6 3.3,1.6 6.5,2.9 7.2,3 0.6,0.1 0.9,-5.6 0.6,-12.5 z" 
+          Fill="#E0E0E0" 
+          Stretch="Uniform" 
+          Width="20" Height="20" 
+          VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                        </Border>
+
+                                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                            <TextBlock Text="{Binding Title}" Foreground="White" FontSize="16" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
+                                                            <TextBlock Text="{Binding Duration}" Foreground="#888" FontSize="13" FontWeight="SemiBold" Margin="0,4,0,0" TextTrimming="CharacterEllipsis"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="Bd" Property="Background" Value="#1AFFFFFF"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter TargetName="Bd" Property="Background" Value="#33FFFFFF"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Refresh" Command="{Binding RefreshCommand}">
+                                <MenuItem.Icon>
+                                    <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" Foreground="White" VerticalAlignment="Center"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+
+                    <ListView.Resources>
+                        <converters:ColumnAlternatingConverter x:Key="ColumnAlternatingConverter"/>
+
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource ColumnAlternatingConverter}">
+                                        <Binding RelativeSource="{RelativeSource Self}"/>
+                                        <Binding Path="DataContext.SelectedBrowserAlternatingStyle" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground" Value="#888888"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Padding" Value="8,6"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="GridViewColumnHeader">
+                                        <Grid>
+                                            <Border Background="{TemplateBinding Background}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <Thumb x:Name="PART_HeaderGripper" 
+                           HorizontalAlignment="Right" 
+                           Width="12" Margin="0,0,-6,0" 
+                           Cursor="SizeWE">
+                                                <Thumb.Template>
+                                                    <ControlTemplate TargetType="Thumb">
+                                                        <Border Background="Transparent"/>
+                                                    </ControlTemplate>
+                                                </Thumb.Template>
+                                            </Thumb>
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#1AFFFFFF"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DataContext.IsShowingFoldersOnly, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+
+                        </Style>
+                        
+                    </ListView.Resources>
+
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="#" Width="40" DisplayMemberBinding="{Binding DisplayTrackNumber}"/>
+                            <GridViewColumn Header="Title" Width="200" DisplayMemberBinding="{Binding Title}"/>
+                            <GridViewColumn Header="Artist" Width="150" DisplayMemberBinding="{Binding Artist}"/>
+                            <GridViewColumn Header="Album" Width="150" DisplayMemberBinding="{Binding Album}"/>
+                            <GridViewColumn Header="Year" Width="60" DisplayMemberBinding="{Binding Year}"/>
+                            <GridViewColumn Header="Genre" Width="110" DisplayMemberBinding="{Binding Genre}"/>
+                            <GridViewColumn Header="Duration" Width="70" DisplayMemberBinding="{Binding Duration}"/>
+                            <GridViewColumn Header="Depth" Width="55" DisplayMemberBinding="{Binding DisplayBitsPerSample}"/>
+                            <GridViewColumn Header="Rate" Width="70" DisplayMemberBinding="{Binding SampleRate, StringFormat='{}{0} Hz'}"/>
+                            <GridViewColumn Header="Bitrate" Width="70" DisplayMemberBinding="{Binding Bitrate, StringFormat='{}{0} kbps'}"/>
+                            <GridViewColumn Header="Format" Width="60" DisplayMemberBinding="{Binding Extension}"/>
+                            <GridViewColumn Header="Size" Width="80" DisplayMemberBinding="{Binding DisplaySize}"/>
+                            <GridViewColumn Header="Modified" Width="130" DisplayMemberBinding="{Binding DisplayModified}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Border Grid.Row="2" VerticalAlignment="Bottom" Height="60" IsHitTestVisible="False">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="#001E1E1E" Offset="0.0" />
+                                                <GradientStop Color="#1E1E1E" Offset="1.0" />
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                </Border>
+            </Grid>
+
+            <Grid x:Name="AlbumViewContainer" Tag="{Binding CurrentFolderPath, NotifyOnTargetUpdated=True}" Background="#181818">
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.40">
+                                    <DoubleAnimation.EasingFunction>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Grid.Triggers>
+
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsAlbumViewEnabled}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+
+                <Border CornerRadius="20,0,0,0" Background="#1E1E1E" ClipToBounds="True">
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Panel.ZIndex="10" IsHitTestVisible="False" CornerRadius="20,0,0,0" Margin="0,0,0,-60">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="{Binding DominantColor}" Offset="0.0" />
+                                    <GradientStop Color="{Binding DominantColor}" Offset="0.58" />
+                                    <GradientStop Color="#001E1E1E" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+
+                        <Grid Grid.Row="0" Panel.ZIndex="11" Margin="20,10,20,5" x:Name="BrowserAlbumHeaderGrid">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.Resources>
+                                <Style x:Key="MinimalCircleActionBtnStyle" TargetType="ButtonBase">
+                                    <Setter Property="Width" Value="32"/>
+                                    <Setter Property="Height" Value="32"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Foreground" Value="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ButtonBase">
+                                                <Grid RenderTransformOrigin="0.5,0.5">
+                                                    <Grid.RenderTransform>
+                                                        <ScaleTransform ScaleX="1" ScaleY="1" x:Name="BtnScale"/>
+                                                    </Grid.RenderTransform>
+                                                    <Ellipse x:Name="BaseEllipse" Fill="#26000000"/>
+                                                    <Ellipse x:Name="HoverOverlay" Fill="#20FFFFFF" Opacity="0"/>
+                                                    <Ellipse x:Name="PressedOverlay" Fill="#20000000" Opacity="0"/>
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <EventTrigger RoutedEvent="MouseEnter">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetName="HoverOverlay" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.15"/>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleX" To="1.15" Duration="0:0:0.15">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleY" To="1.15" Duration="0:0:0.15">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <EventTrigger RoutedEvent="MouseLeave">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetName="HoverOverlay" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.15"/>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.15">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.15">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <EventTrigger RoutedEvent="PreviewMouseDown">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetName="PressedOverlay" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.05"/>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleX" To="0.95" Duration="0:0:0.05"/>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleY" To="0.95" Duration="0:0:0.05"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <EventTrigger RoutedEvent="PreviewMouseUp">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetName="PressedOverlay" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.15"/>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleX" To="1.15" Duration="0:0:0.15">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                                <DoubleAnimation Storyboard.TargetName="BtnScale" Storyboard.TargetProperty="ScaleY" To="1.15" Duration="0:0:0.15">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <DataTrigger Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                        <Setter TargetName="BaseEllipse" Property="StrokeThickness" Value="1"/>
+                                                        <Setter TargetName="BaseEllipse" Property="Stroke">
+                                                            <Setter.Value>
+                                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                    <GradientStop Color="#44FFFFFF" Offset="0.0" />
+                                                                    <GradientStop Color="#05FFFFFF" Offset="0.4" />
+                                                                    <GradientStop Color="#00FFFFFF" Offset="1.0" />
+                                                                </LinearGradientBrush>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Grid.Resources>
+
+                            <Grid Grid.Row="0" Margin="0,0,0,20">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+
+                                    <Button Click="ToggleSidebarBtn_Click" Style="{StaticResource MinimalCircleActionBtnStyle}" Margin="0,0,10,0" ToolTip="Expand/Collapse Sidebar">
+                                        <TextBlock x:Name="AlbumToggleSidebarIcon" Text="&#xE76B;" FontFamily="Segoe MDL2 Assets" FontSize="14" FontWeight="Bold" RenderTransformOrigin="0.5,0.5">
+                                            <TextBlock.RenderTransform>
+                                                <RotateTransform Angle="0"/>
+                                            </TextBlock.RenderTransform>
+                                        </TextBlock>
+                                    </Button>
+
+                                    <ToggleButton ToolTip="Save Album"
+                      IsChecked="{Binding IsCurrentAlbumSaved, Mode=OneWay}"
+                      Command="{Binding ToggleSaveAlbumCommand}"
+                      Style="{StaticResource MinimalCircleActionBtnStyle}"
+                      Visibility="{Binding IsHeartVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      Margin="0,0,10,0">
+                                        <TextBlock x:Name="HeartIcon" FontFamily="Segoe MDL2 Assets" FontSize="14" FontWeight="Bold">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="&#xEB51;"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsCurrentAlbumSaved}" Value="True">
+                                                            <Setter Property="Text" Value="&#xEB52;"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </ToggleButton>
+
+                                    <Grid>
+                                        <Button x:Name="OpenAlbumSearchBtn" 
+        Click="OpenAlbumSearchBtn_Click" 
+        Style="{StaticResource MinimalCircleActionBtnStyle}" 
+        ToolTip="Search Files" 
+        HorizontalAlignment="Left">
+                                            <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="12" FontWeight="Bold"/>
+                                        </Button>
+
+                                        <Border x:Name="AlbumSearchOverlay" CornerRadius="16" HorizontalAlignment="Left" Width="32" Height="32" Opacity="0" Visibility="Collapsed">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="#26000000"/>
+                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                            <Setter Property="Background">
+                                                                <Setter.Value>
+                                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                        <GradientStop Color="#442A2A2A" Offset="0.0"/>
+                                                                        <GradientStop Color="#22151515" Offset="1.0"/>
+                                                                    </LinearGradientBrush>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Setter Property="BorderThickness" Value="1"/>
+                                                            <Setter Property="BorderBrush">
+                                                                <Setter.Value>
+                                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                        <GradientStop Color="#44FFFFFF" Offset="0.0" />
+                                                                        <GradientStop Color="#05FFFFFF" Offset="0.4" />
+                                                                        <GradientStop Color="#00FFFFFF" Offset="1.0" />
+                                                                    </LinearGradientBrush>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="32"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="32"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Grid.Column="0" Text="&#xE721;" FontFamily="Segoe MDL2 Assets" Foreground="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" Opacity="0.7" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False"/>
+
+                                                <TextBox x:Name="AlbumSearchBox" Grid.Column="1" Text="{Binding SearchFileText, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Foreground="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" CaretBrush="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" BorderThickness="0" Padding="4,6" VerticalContentAlignment="Center" FontWeight="SemiBold" LostFocus="AlbumSearchBox_LostFocus"/>
+
+                                                <Button Grid.Column="2" Content="&#xE894;" FontFamily="Segoe MDL2 Assets" Background="Transparent" BorderThickness="0" Cursor="Hand" Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,4,0" Click="CloseAlbumSearchBtn_Click" ToolTip="Close Search">
+                                                    <Button.Template>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border Background="Transparent" Padding="4">
+                                                                <TextBlock x:Name="Icon" Text="{TemplateBinding Content}" FontFamily="{TemplateBinding FontFamily}" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" Opacity="0.6">
+                                                                    <TextBlock.RenderTransform>
+                                                                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                                                    </TextBlock.RenderTransform>
+                                                                </TextBlock>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <EventTrigger RoutedEvent="MouseEnter">
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.15"/>
+                                                                            <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.2" Duration="0:0:0.15"/>
+                                                                            <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.2" Duration="0:0:0.15"/>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </EventTrigger>
+                                                                <EventTrigger RoutedEvent="MouseLeave">
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="Opacity" To="0.6" Duration="0:0:0.15"/>
+                                                                            <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1" Duration="0:0:0.15"/>
+                                                                            <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.15"/>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </EventTrigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Button.Template>
+                                                </Button>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0" Command="{Binding ShowFullCoverCommand}" VerticalAlignment="Top" Margin="0,-10,0,10" Width="220" Height="220" Cursor="Hand" Background="Transparent" BorderThickness="0">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid>
+
+                                                <Border CornerRadius="16" Margin="-15" Opacity="0.75" IsHitTestVisible="False">
+
+                                                    <Border.CacheMode>
+                                                        <BitmapCache EnableClearType="False" RenderAtScale="0.2"/>
+                                                    </Border.CacheMode>
+
+                                                    <Border.Background>
+                                                        <ImageBrush ImageSource="{Binding AlbumCover}" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="LowQuality"/>
+                                                    </Border.Background>
+                                                    <Border.Effect>
+                                                        <BlurEffect Radius="45" RenderingBias="Performance"/>
+                                                    </Border.Effect>
+                                                </Border>
+
+                                                <Grid RenderTransformOrigin="0.5,0.5">
+
+                                                    <Grid.RenderTransform>
+                                                        <ScaleTransform x:Name="CoverScale" ScaleX="1" ScaleY="1"/>
+                                                    </Grid.RenderTransform>
+
+                                                    <Border Background="Black" CornerRadius="8" Opacity="0.5" Margin="0,10,0,-10">
+
+                                                        <Border.CacheMode>
+                                                            <BitmapCache EnableClearType="False" RenderAtScale="0.5"/>
+                                                        </Border.CacheMode>
+
+                                                        <Border.Effect>
+                                                            <BlurEffect Radius="30" RenderingBias="Performance"/>
+                                                        </Border.Effect>
+                                                    </Border>
+
+                                                    <Grid>
+                                                        <Border x:Name="PlaceholderBackground" Background="#181818" CornerRadius="8" Visibility="Collapsed">
+                                                            <TextBlock Text="&#xE189;" FontFamily="Segoe MDL2 Assets" FontSize="48" Foreground="#333" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <Border CornerRadius="8">
+                                                            <Border.Background>
+                                                                <ImageBrush ImageSource="{Binding AlbumCover}" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                                            </Border.Background>
+                                                        </Border>
+                                                    </Grid>
+                                                </Grid>
+
+                                            </Grid>
+
+                                            <ControlTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding AlbumCover}" Value="{x:Null}">
+                                                    <Setter TargetName="PlaceholderBackground" Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Trigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetName="CoverScale" Storyboard.TargetProperty="ScaleX" To="1.04" Duration="0:0:0.2">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                                <DoubleAnimation Storyboard.TargetName="CoverScale" Storyboard.TargetProperty="ScaleY" To="1.04" Duration="0:0:0.2">
+                                                                    <DoubleAnimation.EasingFunction>
+                                                                        <QuadraticEase EasingMode="EaseOut"/>
+                                                                    </DoubleAnimation.EasingFunction>
+                                                                </DoubleAnimation>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </Trigger.EnterActions>
+                                                    <Trigger.ExitActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetName="CoverScale" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetName="CoverScale" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.2"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </Trigger.ExitActions>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                                <Grid Grid.Column="1" Margin="32,0,0,30" VerticalAlignment="Center">
+                                    <StackPanel>
+
+                                        <TextBlock Text="{Binding AlbumTitle}" Foreground="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" FontSize="48" FontWeight="Black" Margin="0,0,45,6" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
+
+                                        <TextBlock Text="{Binding AlbumArtist}" Foreground="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" Opacity="0.85" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,14" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,18" IsHitTestVisible="False">
+
+                                            <StackPanel.Resources>
+                                                <Style x:Key="AlbumGlassOverlay" TargetType="Border">
+                                                    <Setter Property="CornerRadius" Value="6"/>
+                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                            <Setter Property="BorderThickness" Value="1"/>
+                                                            <Setter Property="BorderBrush">
+                                                                <Setter.Value>
+                                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                        <GradientStop Color="#55FFFFFF" Offset="0.0" />
+                                                                        <GradientStop Color="#10FFFFFF" Offset="0.5" />
+                                                                        <GradientStop Color="#15FFFFFF" Offset="1.0" />
+                                                                    </LinearGradientBrush>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Setter Property="Background">
+                                                                <Setter.Value>
+                                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                        <GradientStop Color="#1AFFFFFF" Offset="0.0"/>
+                                                                        <GradientStop Color="#08FFFFFF" Offset="1.0"/>
+                                                                    </LinearGradientBrush>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </StackPanel.Resources>
+
+                                            <Grid Height="24" Margin="0,0,6,0" Visibility="{Binding IsAlbumFormatVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <Border CornerRadius="6" Background="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" Opacity="0.15"/>
+                                                <Border Style="{StaticResource AlbumGlassOverlay}"/>
+                                                <TextBlock Text="{Binding AlbumFormat}" Foreground="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" Opacity="0.8" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Padding="8,0"/>
+                                            </Grid>
+
+                                            <Grid Height="24" Margin="0,0,6,0" Visibility="{Binding IsAlbumSampleRateVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <Border CornerRadius="6" Background="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" Opacity="0.15"/>
+                                                <Border Style="{StaticResource AlbumGlassOverlay}"/>
+                                                <TextBlock Text="{Binding AlbumSampleRate}" Foreground="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" Opacity="0.8" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Padding="8,0"/>
+                                            </Grid>
+
+                                            <Grid Height="24" Margin="0,0,0,0" Visibility="{Binding IsAlbumBitDepthVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <Border CornerRadius="6" Background="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" Opacity="0.15"/>
+                                                <Border Style="{StaticResource AlbumGlassOverlay}"/>
+                                                <TextBlock Text="{Binding AlbumBitDepth}" Foreground="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" Opacity="0.8" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Padding="8,0"/>
+                                            </Grid>
+
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="{Binding AlbumYear}" Foreground="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" Opacity="0.65" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,4" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{Binding AlbumDurationInfo}" Foreground="{Binding DominantColor, Converter={StaticResource ColorToContrastBrushConverter}}" Opacity="0.60" FontSize="14" FontWeight="SemiBold" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+
+                                    </StackPanel>
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
+
+                        <ListView x:Name="AlbumListView" Grid.Row="1" ItemsSource="{Binding Files}" SelectedItem="{Binding SelectedFile}"
+          Background="Transparent" BorderThickness="0"
+          Margin="4,0,2,0" Padding="0"
+          MouseDoubleClick="ListView_MouseDoubleClick"
+          SelectionMode="Extended"
+          PreviewMouseRightButtonUp="ListView_PreviewMouseRightButtonUp"
+          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+          ScrollViewer.VerticalScrollBarVisibility="Auto"
+          VirtualizingStackPanel.ScrollUnit="Pixel">
+
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel>
+                                        <VirtualizingStackPanel.Style>
+                                            <Style TargetType="VirtualizingStackPanel">
+                                                <Setter Property="Margin" Value="0,10,0,0"/>
+                                                <Style.Triggers>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True"/>
+                                                            <Condition Binding="{Binding DataContext.IsMinimalBottomPanelEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="False"/>
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Margin" Value="0,10,0,200"/>
+                                                    </MultiDataTrigger>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True"/>
+                                                            <Condition Binding="{Binding DataContext.IsMinimalBottomPanelEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True"/>
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Margin" Value="0,10,0,110"/>
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </VirtualizingStackPanel.Style>
+                                    </VirtualizingStackPanel>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+
+                            
+
+
+
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="#E0E0E0"/>
+
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Opacity" Value="0.85"/>
+
+                                    <Setter Property="Height" Value="46"/>
+                                    <Setter Property="Margin" Value="0,2,2,2"/>
+                                    <Setter Property="Padding" Value="15,0"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <Border x:Name="ItemBorder" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="ItemBorder" Property="Background" Value="#1AFFFFFF"/>
+                                                </Trigger>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="ItemBorder" Property="Background" Value="#1AFFFFFF"/>
+                                                </Trigger>
+                                                <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                                    <Setter TargetName="ItemBorder" Property="Background" Value="{Binding DataContext.DarkColor, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                </DataTrigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+
+                                <Setter Property="ContextMenu">
+                                    <Setter.Value>
+                                        <ContextMenu>
+                                            <MenuItem Header="Add to Playlist" 
+              ItemsSource="{Binding PlacementTarget.Tag.PlaylistManager.Playlists, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+
+                                                    <MenuItem.Style>
+                                                        <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </MenuItem.Style>
+                                                
+                                                    <MenuItem.Icon>
+                                                        <Path Data="m 48.3,733.4 c -3.9,-1.4 -9,-3.8 -11.5,-5.3 -6.1,-3.8 -16,-14.6 -19.4,-21.2 -7.2,-14 -6.8,4.5 -6.8,-333.6 0,-278.4 0.2,-313.6 2.1,-320.7 C 17,36.3 27.2,23.9 42.5,16.3 L 52.5,11.3 369.9,11 c 353.1,-0.4 323.9,-1.2 339,8.9 10.1,6.7 18.4,17.9 21.8,29.3 2.6,8.7 2.7,12.2 2.3,327.5 -0.4,318.7 -0.4,318.7 -4.5,327.4 -5.5,11.6 -15.5,21.6 -26.8,27 -9,4.3 -9,4.3 -327.7,4.6 -310.3,0.3 -318.9,0.2 -325.7,-2.2 z M 688.4,702.2 c 5.7,-2.4 12.6,-10.4 13.6,-15.8 0.4,-2.4 0.6,-144.9 0.4,-316.6 C 702,57.6 702,57.6 697.9,52.5 695.7,49.6 691.8,46.3 689.2,45 684.9,42.8 667.1,42.7 373,42.7 114.2,42.7 60.5,43 56.9,44.5 51.2,46.9 44.4,54.8 42.7,61.2 41.7,64.8 41.4,162.8 41.7,377.1 42,687.8 42,687.8 46,693.4 c 2.2,3.1 6.1,6.8 8.6,8.1 C 59.1,703.9 70.1,704 371.7,704 c 259.4,0 313.1,-0.3 316.7,-1.8 z M 471.2,621.3 c -6.5,-2 -16.6,-9.4 -21.3,-15.6 -18.1,-23.8 2.2,-59.1 34,-59.3 4.9,0 10.2,0.4 11.9,0.9 3,0.9 3,0.9 3,-65.7 0,-66.7 0,-66.7 3.4,-70.7 2.5,-2.9 6.3,-5 13.7,-7.4 5.6,-1.8 32.4,-10.8 59.4,-20 27,-9.2 51.1,-16.7 53.5,-16.7 5.7,0 10.9,4.3 12.7,10.4 1,3.4 1.3,32.4 1,92.3 C 642,556.7 642,556.7 638.5,564.1 c -4.9,10.6 -10.8,16.6 -21,21.6 -7.8,3.9 -10.1,4.4 -19.6,4.3 -12.5,-0.1 -19.9,-2.8 -28.6,-10.7 C 560.5,571.2 558,565.3 558,552 c 0,-9.2 0.6,-12.4 3,-16.9 9.4,-17.6 30.2,-26.3 50,-20.9 2.2,0.6 2.3,-2.6 2.3,-54.8 0,-30.5 -0.5,-55.4 -1,-55.3 -0.6,0.1 -19.9,6.5 -43,14.3 l -42,14.2 -0.4,79.9 c -0.4,79.2 -0.4,80 -3.3,86 -3.8,7.9 -12.2,16.1 -20.4,20.1 -7.3,3.5 -24.6,5 -32.2,2.6 z M 109.8,490.1 c -2.3,-1 -5.3,-3.4 -6.5,-5.3 -2.9,-4.5 -2.9,-13 0,-17.5 5,-7.6 -3.4,-7.3 180,-6.9 168.6,0.3 168.6,0.3 172,3.6 1.9,1.8 4.1,5.5 4.9,8.2 1.2,4.2 1.1,5.8 -1,10.1 -5.2,10.6 8.7,9.8 -178.5,9.7 -138.7,0 -167.4,-0.4 -170.9,-1.9 z m -4,-114.5 c -4.1,-3.8 -4.9,-5.3 -5,-10.5 -0.2,-7.2 2.1,-11.9 7.2,-14.9 3.5,-2 17.4,-2.2 173.6,-2.2 151.7,0 170.1,0.2 172.8,2.1 6.5,4.6 8.8,14.5 4.9,22 -4.4,8.5 6.8,8 -179.3,8 -169.4,0 -169.4,0 -174.3,-4.4 z m 4.2,-108.1 c -5.7,-2.5 -8.6,-7.5 -8.6,-14.9 0,-5.3 0.7,-6.9 4.5,-10.7 4.5,-4.5 4.5,-4.5 257.2,-4.5 252.7,0 252.7,0 256.8,3.4 9.2,7.7 7.6,21.4 -3.1,26.5 -4,1.9 -28.8,2.1 -253.6,2.1 -204,0 -249.9,-0.4 -253.2,-1.8 z m -2.1,-112.1 c -1.9,-1 -4.5,-4.1 -5.8,-6.7 -3,-6.2 -1.8,-12.6 3.2,-18.3 C 109.1,126 109.1,126 361.6,125.7 c 200.3,-0.3 253.1,0 255.7,1.4 4.3,2.2 9.4,9.8 9.4,14 0,5.2 -4,12.3 -8.1,14.4 -5.6,2.9 -505.4,2.8 -510.7,-0.1 z"
+          Fill="White"
+          Stretch="Uniform"
+          Width="16"
+          Height="16"
+          VerticalAlignment="Center"/>
+                                                    </MenuItem.Icon>
+                                                    <MenuItem.ItemContainerStyle>
+                                                    <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                        <Setter Property="Header" Value="{Binding Name}"/>
+                                                        <Setter Property="IsCheckable" Value="True"/>
+                                                        <Setter Property="IsChecked">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource PlaylistTrackMultiConverter}" Mode="OneWay">
+                                                                    <Binding Path="."/>
+                                                                    <Binding Path="PlacementTarget.DataContext" RelativeSource="{RelativeSource AncestorType=ContextMenu}"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Setter Property="Command" Value="{Binding PlacementTarget.Tag.TogglePlaylistCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                                        <Setter Property="CommandParameter">
+                                                            <Setter.Value>
+                                                                <MultiBinding Converter="{StaticResource PlaylistTrackMultiConverter}">
+                                                                    <Binding Path="."/>
+                                                                    <Binding Path="PlacementTarget.DataContext" RelativeSource="{RelativeSource AncestorType=ContextMenu}"/>
+                                                                </MultiBinding>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </MenuItem.ItemContainerStyle>
+                                            </MenuItem>
+
+                                                <Separator>
+                                                    <Separator.Style>
+                                                        <Style TargetType="Separator" BasedOn="{StaticResource {x:Static MenuItem.SeparatorStyleKey}}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Separator.Style>
+                                                </Separator>
+
+                                                <MenuItem Header="Show in Explorer" 
+              Command="{Binding PlacementTarget.Tag.OpenInExplorerCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+              CommandParameter="{Binding FullPath}">
+                                                    <MenuItem.Icon>
+                                                        <Path Data="M84.5,602.1C72.4,598.3 62.1,588.4 56.8,575.5 54,568.7 54,568.4 53.6,380 53.4,252.4 53.7,188.4 54.6,182.2 57.3,165.2 67.5,151.2 82.4,144.2 90,140.7 90,140.7 183.4,140.7c93.4,0 93.4,0 102.2,4.3 11.5,5.7 15.7,10.5 29.8,34.5 12.6,21.4 15.5,25.3 20.7,27.7 2.4,1.1 38.7,1.7 128.7,2.2C590,210 590,210 597,213.7c9.8,5.1 17.1,13 22.1,23.4 4,8.6 4.2,9.6 4.7,29.7l0.5,20.8 18.9,0.6c15.8,0.5 19.9,1.1 25.5,3.6 13.1,5.8 21,17.9 21.1,32.2 0,5.7-7.6,34.1-34.3,127.9-18.9,66.3-35.6,123-37.1,125.9-4.2,8.2-14,17.8-22.3,21.9-7.5,3.7-7.5,3.7-256.8,3.9-200.4,0.2-250.4-0.1-254.8-1.5zM585,579.3c5.8-2.4 10.5-6.5 13-11.4 1-1.9 17.1-57.4 35.9-123.3 30.7-107.9 34-120.3 32.6-124.2-3-9.1 17.9-8.4-249-8.4-268.8,0-247.1-0.8-254.5,8.9-2.6,3.5-11.4,32.5-38.6,127.5-19.3,67.6-35.2,123.8-35.2,124.7 0,1 1.5,3.2 3.3,5 3.3,3.3 3.3,3.3 245.4,3.3 215.5,0 242.6-0.2 247-2.1zM126,360c12.3-43.6 15.4-50.9 25.3-59.7 2.9-2.6 8.6-6.3 12.7-8.2 7.3-3.5 7.3-3.5 222.3-3.9l215-0.4v-17.7c0-16.4-0.3-18.2-3.4-24.6-2.2-4.4-5.2-8-8.3-9.9C584.7,232.7 584.7,232.7 459.3,232 334,231.3 334,231.3 326.4,227.6 316.1,222.5 309.9,215.1 296,191.3c-18-30.9-6.3-27.9-110.4-28.4-87.5-0.4-87.5-0.4-94.2,3-4.1,2-8.1,5.3-10.1,8.3C78,179.1 78,179.1 77.8,354.6L77.5,530 96.1,465.3C106.3,429.8 119.8,382.4 126,360Z" 
+          Fill="White" 
+          Stretch="Uniform" 
+          Width="16" Height="16" 
+          VerticalAlignment="Center"/>
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+
+                                           
+
+                                            <MenuItem Header="Refresh" 
+              Command="{Binding PlacementTarget.Tag.RefreshCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                                                <MenuItem.Icon>
+                                                    <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" Foreground="White" VerticalAlignment="Center"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+
+                                            <MenuItem Header="Track Information" 
+CommandParameter="{Binding FullPath}">
+                                                <MenuItem.Icon>
+                                                    <TextBlock Text="&#xE946;" FontFamily="Segoe MDL2 Assets" Foreground="White" VerticalAlignment="Center"/>
+                                                </MenuItem.Icon>
+                                                <MenuItem.Style>
+                                                    <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                        <EventSetter Event="MenuItem.Click" Handler="TrackInfoMenuItem_Click"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </MenuItem.Style>
+                                            </MenuItem>
+
+                                        </ContextMenu>
+                                    </Setter.Value>
+                                </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Opacity" Value="1.0"/>
+                                            <Setter Property="FontWeight" Value="ExtraBold"/>
+                                        </Trigger>
+
+                                        <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                            <Setter Property="Opacity" Value="1.0"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                        </ListView.ItemContainerStyle>
+
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="160"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                                            <Grid x:Name="TrackNumberGrid" Width="30" Height="30">
+                                                <TextBlock Text="{Binding DisplayTrackNumber}" Foreground="#888" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+
+                                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Height="14">
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="3"/>
+                                                        <ColumnDefinition Width="2"/>
+                                                        <ColumnDefinition Width="3"/>
+                                                        <ColumnDefinition Width="2"/>
+                                                        <ColumnDefinition Width="3"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.Resources>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Background" Value="{Binding DataContext.LightColor, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                            <Setter Property="VerticalAlignment" Value="Bottom"/>
+                                                            <Setter Property="CornerRadius" Value="2"/>
+                                                            <Setter Property="Height" Value="14"/>
+                                                            <Setter Property="RenderTransformOrigin" Value="0.5, 1"/>
+                                                            <Setter Property="RenderTransform">
+                                                                <Setter.Value>
+                                                                    <ScaleTransform ScaleY="0.2"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Grid.Resources>
+
+                                                    <Border Grid.Column="0">
+                                                        <Border.Style>
+                                                            <Style TargetType="Border" BasedOn="{StaticResource {x:Type Border}}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding DataContext.IsPlaying, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                                        <DataTrigger.EnterActions>
+                                                                            <BeginStoryboard Name="Anim1">
+                                                                                <Storyboard Timeline.DesiredFrameRate="24" RepeatBehavior="Forever" AutoReverse="True">
+                                                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" From="0.3" To="1.0" Duration="0:0:0.35" />
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </DataTrigger.EnterActions>
+                                                                        <DataTrigger.ExitActions>
+                                                                            <StopStoryboard BeginStoryboardName="Anim1"/>
+                                                                            <BeginStoryboard>
+                                                                                <Storyboard Timeline.DesiredFrameRate="24">
+                                                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="0.2" Duration="0:0:0.2">
+                                                                                        <DoubleAnimation.EasingFunction>
+                                                                                            <QuadraticEase EasingMode="EaseOut"/>
+                                                                                        </DoubleAnimation.EasingFunction>
+                                                                                    </DoubleAnimation>
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </DataTrigger.ExitActions>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                    </Border>
+
+                                                    <Border Grid.Column="2">
+                                                        <Border.Style>
+                                                            <Style TargetType="Border" BasedOn="{StaticResource {x:Type Border}}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding DataContext.IsPlaying, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                                        <DataTrigger.EnterActions>
+                                                                            <BeginStoryboard Name="Anim2">
+                                                                                <Storyboard Timeline.DesiredFrameRate="24" RepeatBehavior="Forever" AutoReverse="True">
+                                                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" From="0.8" To="0.2" Duration="0:0:0.45" />
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </DataTrigger.EnterActions>
+                                                                        <DataTrigger.ExitActions>
+                                                                            <StopStoryboard BeginStoryboardName="Anim2"/>
+                                                                            <BeginStoryboard>
+                                                                                <Storyboard Timeline.DesiredFrameRate="24">
+                                                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="0.2" Duration="0:0:0.2">
+                                                                                        <DoubleAnimation.EasingFunction>
+                                                                                            <QuadraticEase EasingMode="EaseOut"/>
+                                                                                        </DoubleAnimation.EasingFunction>
+                                                                                    </DoubleAnimation>
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </DataTrigger.ExitActions>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                    </Border>
+
+                                                    <Border Grid.Column="4">
+                                                        <Border.Style>
+                                                            <Style TargetType="Border" BasedOn="{StaticResource {x:Type Border}}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding DataContext.IsPlaying, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                                        <DataTrigger.EnterActions>
+                                                                            <BeginStoryboard Name="Anim3">
+                                                                                <Storyboard Timeline.DesiredFrameRate="24" RepeatBehavior="Forever" AutoReverse="True">
+                                                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" From="0.4" To="0.9" Duration="0:0:0.25" />
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </DataTrigger.EnterActions>
+                                                                        <DataTrigger.ExitActions>
+                                                                            <StopStoryboard BeginStoryboardName="Anim3"/>
+                                                                            <BeginStoryboard>
+                                                                                <Storyboard Timeline.DesiredFrameRate="24">
+                                                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="0.2" Duration="0:0:0.2">
+                                                                                        <DoubleAnimation.EasingFunction>
+                                                                                            <QuadraticEase EasingMode="EaseOut"/>
+                                                                                        </DoubleAnimation.EasingFunction>
+                                                                                    </DoubleAnimation>
+                                                                                </Storyboard>
+                                                                            </BeginStoryboard>
+                                                                        </DataTrigger.ExitActions>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                    </Border>
+                                                </Grid>
+                                            </Grid>
+
+                                            <Border x:Name="FolderCoverBorder" Width="32" Height="32" CornerRadius="6" Visibility="Collapsed">
+                                                <Border.Background>
+                                                    <ImageBrush ImageSource="{Binding FullPath, Converter={StaticResource SubfolderToCoverConverter}}" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                                </Border.Background>
+                                            </Border>
+                                        </Grid>
+
+                                        <TextBlock Grid.Column="1" FontSize="14" VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                    <Setter Property="Text" Value="{Binding Title}"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Title}" Value="{x:Null}">
+                                                            <Setter Property="Text" Value="{Binding Name}"/>
+                                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsPlaying}" Value="True">
+                                                            <Setter Property="Foreground" Value="{Binding DataContext.LightColor, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                                            <Setter Property="Foreground" Value="#E0E0E0"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+
+                                        <Grid Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+
+                                            <TextBlock x:Name="DurationTextBlock" 
+               Text="{Binding Duration, Converter={StaticResource CleanDurationConverter}}" 
+               Foreground="#888" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Right" />
+
+                                            <Button x:Name="MoreOptionsBtn" 
+        Content="&#xE712;" FontFamily="Segoe MDL2 Assets" FontSize="18" Foreground="#888"
+        Background="Transparent" BorderThickness="0" Cursor="Hand"
+        VerticalAlignment="Center" HorizontalAlignment="Right"
+        Opacity="0" IsHitTestVisible="False"
+        Click="MoreOptionsBtn_Click"
+        Margin="0,0,-8,0">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border x:Name="Bd" Background="Transparent" Padding="12,4" CornerRadius="4">
+                                                            <TextBlock x:Name="Icon" Text="{TemplateBinding Content}" FontFamily="{TemplateBinding FontFamily}" 
+                           FontSize="{TemplateBinding FontSize}" Foreground="{TemplateBinding Foreground}" 
+                           VerticalAlignment="Center" HorizontalAlignment="Center"
+                           RenderTransformOrigin="0.5,0.5">
+                                                                <TextBlock.RenderTransform>
+                                                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                                                </TextBlock.RenderTransform>
+                                                            </TextBlock>
+                                                        </Border>
+
+                                                        <ControlTemplate.Triggers>
+                                                            <EventTrigger RoutedEvent="MouseEnter">
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <ColorAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" To="White" Duration="0:0:0.2">
+                                                                            <ColorAnimation.EasingFunction>
+                                                                                <CubicEase EasingMode="EaseOut"/>
+                                                                            </ColorAnimation.EasingFunction>
+                                                                        </ColorAnimation>
+                                                                        <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.25" Duration="0:0:0.2">
+                                                                            <DoubleAnimation.EasingFunction>
+                                                                                <CubicEase EasingMode="EaseOut"/>
+                                                                            </DoubleAnimation.EasingFunction>
+                                                                        </DoubleAnimation>
+                                                                        <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.25" Duration="0:0:0.2">
+                                                                            <DoubleAnimation.EasingFunction>
+                                                                                <CubicEase EasingMode="EaseOut"/>
+                                                                            </DoubleAnimation.EasingFunction>
+                                                                        </DoubleAnimation>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </EventTrigger>
+
+                                                            <EventTrigger RoutedEvent="MouseLeave">
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <ColorAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" To="#888888" Duration="0:0:0.2">
+                                                                            <ColorAnimation.EasingFunction>
+                                                                                <CubicEase EasingMode="EaseOut"/>
+                                                                            </ColorAnimation.EasingFunction>
+                                                                        </ColorAnimation>
+                                                                        <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1" Duration="0:0:0.2">
+                                                                            <DoubleAnimation.EasingFunction>
+                                                                                <CubicEase EasingMode="EaseOut"/>
+                                                                            </DoubleAnimation.EasingFunction>
+                                                                        </DoubleAnimation>
+                                                                        <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.2">
+                                                                            <DoubleAnimation.EasingFunction>
+                                                                                <CubicEase EasingMode="EaseOut"/>
+                                                                            </DoubleAnimation.EasingFunction>
+                                                                        </DoubleAnimation>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </EventTrigger>
+
+                                                            <EventTrigger RoutedEvent="PreviewMouseDown">
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.0" Duration="0:0:0.05"/>
+                                                                        <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.0" Duration="0:0:0.05"/>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </EventTrigger>
+                                                            <EventTrigger RoutedEvent="PreviewMouseUp">
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.25" Duration="0:0:0.15">
+                                                                            <DoubleAnimation.EasingFunction>
+                                                                                <CubicEase EasingMode="EaseOut"/>
+                                                                            </DoubleAnimation.EasingFunction>
+                                                                        </DoubleAnimation>
+                                                                        <DoubleAnimation Storyboard.TargetName="Icon" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.25" Duration="0:0:0.15">
+                                                                            <DoubleAnimation.EasingFunction>
+                                                                                <CubicEase EasingMode="EaseOut"/>
+                                                                            </DoubleAnimation.EasingFunction>
+                                                                        </DoubleAnimation>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </EventTrigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListViewItem}}" Value="True">
+
+                                            <Setter TargetName="MoreOptionsBtn" Property="IsHitTestVisible" Value="True"/>
+
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="DurationTextBlock" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.25">
+                                                            <DoubleAnimation.EasingFunction>
+                                                                <CubicEase EasingMode="EaseInOut"/>
+                                                            </DoubleAnimation.EasingFunction>
+                                                        </DoubleAnimation>
+                                                        <DoubleAnimation Storyboard.TargetName="MoreOptionsBtn" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.25">
+                                                            <DoubleAnimation.EasingFunction>
+                                                                <CubicEase EasingMode="EaseInOut"/>
+                                                            </DoubleAnimation.EasingFunction>
+                                                        </DoubleAnimation>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+
+                                            <DataTrigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="DurationTextBlock" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.25">
+                                                            <DoubleAnimation.EasingFunction>
+                                                                <CubicEase EasingMode="EaseInOut"/>
+                                                            </DoubleAnimation.EasingFunction>
+                                                        </DoubleAnimation>
+                                                        <DoubleAnimation Storyboard.TargetName="MoreOptionsBtn" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.25">
+                                                            <DoubleAnimation.EasingFunction>
+                                                                <CubicEase EasingMode="EaseInOut"/>
+                                                            </DoubleAnimation.EasingFunction>
+                                                        </DoubleAnimation>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.ExitActions>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                            <Setter TargetName="TrackNumberGrid" Property="Visibility" Value="Collapsed"/>
+                                            <Setter TargetName="FolderCoverBorder" Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <Border Grid.Row="1" VerticalAlignment="Top" Height="20" Margin="4,0,2,0" IsHitTestVisible="False">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#1E1E1E" Offset="0.0" />
+                                    <GradientStop Color="#001E1E1E" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+
+
+                        <Border Grid.Row="1" VerticalAlignment="Bottom" Height="60" Margin="4,0,2,0" IsHitTestVisible="False">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DataContext.IsGlassModeEnabled, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                        <GradientStop Color="#001E1E1E" Offset="0.0" />
+                                                        <GradientStop Color="#1E1E1E" Offset="1.0" />
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+
+        </Grid>
+
+        
+
+    </Grid>
+</UserControl>
