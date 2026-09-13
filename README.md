@@ -1,7 +1,9 @@
-<div align="center">
-  <!-- Перетащи сюда свой главный баннер с логотипом -->
-  <img width="1024" height="709" alt="GHlogo" src="https://github.com/user-attachments/assets/48242935-dfd7-47d4-ae4d-7820db9489e1" />
-</div>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/d03d4b8e-cafe-4345-9ab5-c1d9796db385#gh-light-mode-only" alt="JLS Logo" width="256">
+  <img src="https://github.com/user-attachments/assets/499f7ed7-00b5-43d0-8364-2d4fde58140d#gh-dark-mode-only" alt="JLS Logo" width="256">
+</p>
+
+
 
 ---
 
