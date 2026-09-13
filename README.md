@@ -52,6 +52,30 @@ Save your favorite albums in a dedicated tab. Keep your most cherished releases 
   <img width="2042" height="1001" alt="image_2026-09-14_02-21-22" src="https://github.com/user-attachments/assets/f7e37ffd-87fc-498f-ba90-02e9d8597278" />
 </p>
 
+---
+
+### Now Playing
+
+Follow along with your favorite tracks using the dedicated lyrics view. The text is time-synced and automatically scrolls as the song progresses.
+
+<br>
+
+<p align="center">
+  <i>Standard view featuring time-synced auto-scrolling lyrics</i><br><br>
+  <img width="2042" height="1001" alt="image_2026-09-13_18-35-33" src="https://github.com/user-attachments/assets/2d98f38d-b60d-4e99-bf51-d45049f8c5fc" />
+</p>
+
+<br>
+
+Manage your upcoming tracks with the integrated playback queue. For a more dynamic visual experience, enable the audio-reactive fluid background that responds in real-time to the current audio frequencies.
+
+<br>
+
+<p align="center">
+  <i>Playback queue alongside the audio-reactive fluid background</i><br><br>
+  <img width="2042" height="1001" alt="image_2026-09-13_18-36-11" src="https://github.com/user-attachments/assets/7281e933-414d-46a4-8c39-7b551e4b8e67" />
+</p>
+
 ### ⚙️ Core Features
 
 **🎛️ Audio Engine & Playback**
