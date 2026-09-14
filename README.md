@@ -78,25 +78,25 @@ Manage your upcoming tracks with the integrated playback queue. For a more dynam
 
 ### Core Features
 
-** Audio Engine & Playback**
+ Audio Engine & Playback
 * **WASAPI / ASIO** Bit-perfect output
 * **Gapless Playback & Crossfade**
 * **High-Resolution Audio Support**
 * **Smart Silence Skipping**
 
-** UI & Visuals**
+ UI & Visuals
 * **Audio-reactive fluid background**
 * **Smart color extraction** from Album Art
 * **Customizable Waveforms & VU-meters**
 * **Minimal UI layouts**
 
-** Advanced Statistics**
+ Advanced Statistics
 * **Detailed listening session tracking**
 * **Top Tracks, Artists & Albums logic**
 * **Skip rate & Completion percentages**
 * **Streak counter & Audio format stats**
 
-** Workflow & Lyrics**
+ Workflow & Lyrics
 * **Built-in LRC Editor** with ms-sync
 * **Single & Bulk Tag Editing**
 * **Global Hotkeys & Media Keys support**
