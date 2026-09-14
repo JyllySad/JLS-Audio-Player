@@ -72,7 +72,7 @@ Manage your upcoming tracks with the integrated playback queue. For a more dynam
 <br>
 
 <p align="center">
-  <i>Playback queue alongside the audio-reactive fluid background</i><br><br>
+  <i>Playback queue with audio-reactive fluid background</i><br><br>
   <img width="2042" height="1001" alt="image_2026-09-13_18-36-11" src="https://github.com/user-attachments/assets/7281e933-414d-46a4-8c39-7b551e4b8e67" />
 </p>
 
