@@ -110,3 +110,10 @@ Manage your upcoming tracks with the integrated playback queue. For a more dynam
 * **Data & Utilities:** SQLite for local storage, TagLib# for metadata processing, and H.NotifyIcon.
 
 © 2026 JLS Audio Player. Made by JyllyS.
+
+## License
+
+This program is free software: you can redistribute it and/or modify it under the terms of the **GNU General Public License as published by the Free Software Foundation, version 3**.
+
+**BASS Library Linking Exception**
+As a special exception, the copyright holders of this project give you permission to link this program with the BASS audio library by un4seen developments (regardless of the license terms of BASS), and to distribute the resulting executable. You must obey the GNU General Public License in all respects for all of the code used other than BASS. If you modify this file, you may extend this exception to your version of the file, but you are not obligated to do so. If you do not wish to do so, delete this exception statement from your version.
