@@ -6,7 +6,7 @@
 ---
 
 <p align="center">
-  <b>An audiophile-focused music player with bit-perfect playback powered by the BASS audio engine, customizable visuals, and listening statistics, built for a fully offline and privacy-friendly listening experience.</b>
+  <b>An audiophile-focused music player powered by the BASS audio engine, customizable visuals, and listening statistics, built for a fully offline and privacy-friendly listening experience.</b>
 </p>
 
 ---
@@ -79,7 +79,7 @@ Manage your upcoming tracks with the integrated playback queue. For a more dynam
 ### Core Features
 
  Audio Engine & Playback
-* **WASAPI / ASIO** Bit-perfect output
+* **WASAPI / ASIO** output
 * **Gapless Playback & Crossfade**
 * **High-Resolution Audio Support**
 * **Smart Silence Skipping**
