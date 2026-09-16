@@ -111,6 +111,10 @@ Manage your upcoming tracks with the integrated playback queue. For a more dynam
 
 © 2026 JLS Audio Player. Made by JyllyS.
 
+## Disclaimer
+
+Please note that this is my first project. Because of this, you may encounter some architectural flaws, illogical solutions, and code duplication.
+
 ## License
 
 This program is free software: you can redistribute it and/or modify it under the terms of the **GNU General Public License as published by the Free Software Foundation, version 3**.
