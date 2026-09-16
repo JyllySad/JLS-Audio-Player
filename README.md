@@ -113,7 +113,7 @@ Manage your upcoming tracks with the integrated playback queue. For a more dynam
 
 ## Disclaimer
 
-Please note that this is my first project. Because of this, you may encounter some architectural flaws, illogical solutions, and code duplication.
+Please note that this is my first project, originally developed for personal use (which is why the first public release is version 1.4.32). Because of this, you may encounter some architectural flaws, illogical solutions, and code duplication.
 
 ## License
 
