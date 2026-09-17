@@ -90,9 +90,9 @@ namespace JLS.Services
             bool isSkipped = _accumulatedSeconds < (_currentTotalSeconds * 0.5);
 
             string? path = _currentPath;
-            string? title = _currentTitle;
-            string? artist = _currentArtist;
-            string? album = _currentAlbum;
+            string? title = string.IsNullOrWhiteSpace(_currentTitle) ? null : _currentTitle.Trim();
+            string? artist = string.IsNullOrWhiteSpace(_currentArtist) ? null : _currentArtist.Trim();
+            string? album = string.IsNullOrWhiteSpace(_currentAlbum) ? null : _currentAlbum.Trim();
             string? format = _currentFormat;
             double listened = _accumulatedSeconds;
             double total = _currentTotalSeconds;

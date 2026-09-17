@@ -367,5 +367,63 @@ namespace JLS.ViewModels
                 }
             }
         }
+
+        [RelayCommand]
+        private async Task ExtractCover()
+        {
+            if (string.IsNullOrEmpty(TrackFullPath) || !File.Exists(TrackFullPath)) return;
+
+            try
+            {
+                byte[]? picBytes = null;
+                string extension = ".jpg";
+                string filter = "JPEG Image (*.jpg)|*.jpg";
+
+                await Task.Run(() =>
+                {
+                    using var file = TagLib.File.Create(new JLS.Services.SafeFileAbstraction(TrackFullPath));
+                    if (file.Tag.Pictures.Length > 0)
+                    {
+                        var pic = file.Tag.Pictures[0];
+                        picBytes = pic.Data.Data;
+
+                        if (pic.MimeType.ToLowerInvariant().Contains("png"))
+                        {
+                            extension = ".png";
+                            filter = "PNG Image (*.png)|*.png";
+                        }
+                    }
+                });
+
+                if (picBytes == null || picBytes.Length == 0)
+                {
+                    System.Windows.MessageBox.Show("No cover art found in this file.", "Extract Cover", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    return;
+                }
+
+                var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    Title = "Save Track Cover",
+                    FileName = $"{TrackName} - Cover{extension}",
+                    Filter = $"{filter}|All files (*.*)|*.*"
+                };
+
+                string? trackDirectory = Path.GetDirectoryName(TrackFullPath);
+                if (!string.IsNullOrEmpty(trackDirectory) && Directory.Exists(trackDirectory))
+                {
+                    saveFileDialog.InitialDirectory = trackDirectory;
+                }
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    await File.WriteAllBytesAsync(saveFileDialog.FileName, picBytes);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Failed to extract cover: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
+        }
+
     }
 }

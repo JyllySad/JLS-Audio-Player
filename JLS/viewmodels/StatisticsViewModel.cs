@@ -447,8 +447,7 @@ namespace JLS.ViewModels
             var tempArtists = new List<TopItem>();
             using (var cmdArt = conn.CreateCommand())
             {
-                
-                cmdArt.CommandText = $"SELECT t.Artist, SUM(l.SecondsListened) as T FROM Listens l JOIN Tracks t ON l.TrackId = t.TrackId {where} t.Artist IS NOT NULL AND t.Artist != 'Unknown Artist' GROUP BY t.Artist COLLATE NOCASE ORDER BY T DESC LIMIT 10";
+                cmdArt.CommandText = $"SELECT t.Artist, SUM(l.SecondsListened) as T FROM Listens l JOIN Tracks t ON l.TrackId = t.TrackId {where} t.Artist IS NOT NULL AND TRIM(t.Artist) != '' AND t.Artist != 'Unknown Artist' GROUP BY t.Artist COLLATE NOCASE ORDER BY T DESC LIMIT 10";
                 if (start.HasValue) cmdArt.Parameters.AddWithValue("@start", start.Value);
                 using (var reader = cmdArt.ExecuteReader())
                 {
@@ -461,14 +460,12 @@ namespace JLS.ViewModels
                     }
                 }
             }
-            TopArtists = new ObservableCollection<TopItem>(tempArtists);    
+            TopArtists = new ObservableCollection<TopItem>(tempArtists);
 
             var tempAlbums = new List<TopItem>();
             using (var cmdAlb = conn.CreateCommand())
             {
-                
-                cmdAlb.CommandText = $"SELECT t.Album, t.Artist, SUM(l.SecondsListened) as T FROM Listens l JOIN Tracks t ON l.TrackId = t.TrackId {where} t.Album IS NOT NULL AND t.Album != 'Unknown Album' GROUP BY t.Album COLLATE NOCASE, t.Artist COLLATE NOCASE ORDER BY T DESC LIMIT 10";
-
+                cmdAlb.CommandText = $"SELECT t.Album, t.Artist, SUM(l.SecondsListened) as T FROM Listens l JOIN Tracks t ON l.TrackId = t.TrackId {where} t.Album IS NOT NULL AND TRIM(t.Album) != '' AND t.Album != 'Unknown Album' GROUP BY t.Album COLLATE NOCASE, t.Artist COLLATE NOCASE ORDER BY T DESC LIMIT 10";
                 if (start.HasValue) cmdAlb.Parameters.AddWithValue("@start", start.Value);
 
                 using (var reader = cmdAlb.ExecuteReader())
@@ -476,35 +473,40 @@ namespace JLS.ViewModels
                     int rank = 1;
                     while (reader.Read())
                     {
-                        
-                        string albumName = reader.IsDBNull(0) ? "Unknown Album" : reader.GetString(0);
-                        string artistName = reader.IsDBNull(1) ? "Unknown Artist" : reader.GetString(1);
+                        string dbAlbum = reader.IsDBNull(0) ? "" : reader.GetString(0);
+                        string dbArtist = reader.IsDBNull(1) ? "" : reader.GetString(1);
+
+                        string albumName = string.IsNullOrWhiteSpace(dbAlbum) ? "Unknown Album" : dbAlbum;
+                        string artistName = string.IsNullOrWhiteSpace(dbArtist) ? "Unknown Artist" : dbArtist;
 
                         tempAlbums.Add(new TopItem
                         {
                             Rank = rank,
                             Name = albumName,
-                            SecondaryText = $" by {artistName}",     
-                            Value = FormatTime(reader.GetDouble(2))       
+                            SecondaryText = $" by {artistName}",
+                            Value = FormatTime(reader.GetDouble(2))
                         });
                         rank++;
                     }
                 }
             }
-            TopAlbums = new ObservableCollection<TopItem>(tempAlbums);    
+            TopAlbums = new ObservableCollection<TopItem>(tempAlbums);
 
             var tempTracks = new List<TopItem>();
             using (var cmdTrk = conn.CreateCommand())
             {
-                cmdTrk.CommandText = $"SELECT t.Title, t.Artist, SUM(l.SecondsListened) as T FROM Listens l JOIN Tracks t ON l.TrackId = t.TrackId {where} t.Title IS NOT NULL GROUP BY t.TrackId ORDER BY T DESC LIMIT 10";
+                cmdTrk.CommandText = $"SELECT t.Title, t.Artist, SUM(l.SecondsListened) as T FROM Listens l JOIN Tracks t ON l.TrackId = t.TrackId {where} t.Title IS NOT NULL AND TRIM(t.Title) != '' GROUP BY t.TrackId ORDER BY T DESC LIMIT 10";
                 if (start.HasValue) cmdTrk.Parameters.AddWithValue("@start", start.Value);
                 using (var reader = cmdTrk.ExecuteReader())
                 {
                     int rank = 1;
                     while (reader.Read())
                     {
-                        string trackTitle = reader.IsDBNull(0) ? "Unknown Title" : reader.GetString(0);
-                        string artistName = reader.IsDBNull(1) ? "Unknown Artist" : reader.GetString(1);
+                        string dbTitle = reader.IsDBNull(0) ? "" : reader.GetString(0);
+                        string dbArtist = reader.IsDBNull(1) ? "" : reader.GetString(1);
+
+                        string trackTitle = string.IsNullOrWhiteSpace(dbTitle) ? "Unknown Title" : dbTitle;
+                        string artistName = string.IsNullOrWhiteSpace(dbArtist) ? "Unknown Artist" : dbArtist;
 
                         tempTracks.Add(new TopItem
                         {
@@ -517,7 +519,7 @@ namespace JLS.ViewModels
                     }
                 }
             }
-            TopTracks = new ObservableCollection<TopItem>(tempTracks);    
+            TopTracks = new ObservableCollection<TopItem>(tempTracks);
         }
 
         private void CalculateStreaks(SqliteConnection conn)
