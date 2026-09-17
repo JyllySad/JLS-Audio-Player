@@ -88,6 +88,18 @@ Immerse yourself in the music with 7 real-time full-screen audio visualizers. Ch
   <img width="2042" height="1001" alt="image_2026-09-14_03-23-22" src="https://github.com/user-attachments/assets/d17b71c4-ff26-4614-a9b1-ddb50c1a860c" />
 </p>
 
+---
+
+### Customizable Bottom Panel
+Tailor the playback experience with a versatile bottom control panel. Choose from 3 different progress indicator types: a standard seekbar, an animated progress bar, or an audio waveform. The waveform mode offers 7 distinct styles to match your UI preference. You can further customize the layout with various volume control designs and L/R channel VU-meters.
+
+<br>
+
+<p align="center">
+  <i>Various bottom panel layouts</i><br><br>
+  <img width="2038" height="680" alt="custom bottom panel" src="https://github.com/user-attachments/assets/efd81201-a45d-42ce-b3b0-5e20e3184963" />
+</p>
+
 ### Core Features
 
  Audio Engine & Playback
