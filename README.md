@@ -112,6 +112,18 @@ The player features a glass mode. Additionally, the bottom control panel can be 
   <img width="2042" height="1001" alt="image_2026-09-13_19-30-50" src="https://github.com/user-attachments/assets/e702daa9-2396-43fa-a78d-d47976b959c6" />
 </p>
 
+---
+
+### Advanced Offline Statistics
+Track your listening habits locally with a statistics dashboard. All data is processed and stored entirely offline. The module logs detailed metrics including total listening time, daily streaks, skip rates, audio format distribution. It also dynamically generates Top 10 lists for your most played tracks, artists, and albums, all of this can be filtered by specific time periods ranging from the last 24 hours to your all-time listening history.
+
+<br>
+
+<p align="center">
+  <i>Statistics dashboard</i><br><br>
+  <img width="1803" height="820" alt="stats" src="https://github.com/user-attachments/assets/f723db70-fe82-4e5d-ae31-7c80a50820de" />
+</p>
+
 ### Core Features
 
  Audio Engine & Playback
