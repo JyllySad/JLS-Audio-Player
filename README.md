@@ -114,7 +114,7 @@ The player features a glass mode. Additionally, the bottom control panel can be 
 
 ---
 
-### Advanced Offline Statistics
+### Offline Statistics
 Track your listening habits locally with a statistics dashboard. All data is processed and stored entirely offline. The module logs detailed metrics including total listening time, daily streaks, skip rates, audio format distribution. It also dynamically generates Top 10 lists for your most played tracks, artists, and albums, all of this can be filtered by specific time periods ranging from the last 24 hours to your all-time listening history.
 
 <br>
