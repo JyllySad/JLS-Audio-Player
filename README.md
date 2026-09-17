@@ -97,7 +97,19 @@ Tailor the playback experience with a versatile bottom control panel. Choose fro
 
 <p align="center">
   <i>Various bottom panel layouts</i><br><br>
-  <img width="2038" height="680" alt="custom bottom panel" src="https://github.com/user-attachments/assets/efd81201-a45d-42ce-b3b0-5e20e3184963" />
+  <img width="2038" height="680" alt="custom bottom panel2" src="https://github.com/user-attachments/assets/56e13e79-f71e-4db7-bc11-12a152096c43" />
+</p>
+
+---
+
+### Glass Mode & Minimalist Bottom Panel
+The player features a glass mode. Additionally, the bottom control panel can be switched to a minimalist layout, reducing its visual footprint by displaying only essential controls.
+
+<br>
+
+<p align="center">
+  <i>Glass interface mode paired with the minimalist bottom panel</i><br><br>
+  <img width="2042" height="1001" alt="image_2026-09-13_19-30-50" src="https://github.com/user-attachments/assets/e702daa9-2396-43fa-a78d-d47976b959c6" />
 </p>
 
 ### Core Features
