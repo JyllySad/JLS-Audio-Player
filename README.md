@@ -76,6 +76,54 @@ Manage your upcoming tracks with the integrated playback queue. For a more dynam
   <img width="2042" height="1001" alt="image_2026-09-13_18-36-11" src="https://github.com/user-attachments/assets/7281e933-414d-46a4-8c39-7b551e4b8e67" />
 </p>
 
+---
+
+### Full-Screen Audio Visualizers
+Immerse yourself in the music with 7 real-time full-screen audio visualizers. Choose from a variety of reactive styles to match your preference: Classic Bars, Radial Spectrum, Mirrored Mountains, Smooth Bars, Oscilloscope Wave, Split Smooth Bars, and Perspective Road.
+
+<br>
+
+<p align="center">
+  <i>Classic Bars visualizer in full-screen mode</i><br><br>
+  <img width="2042" height="1001" alt="image_2026-09-14_03-23-22" src="https://github.com/user-attachments/assets/d17b71c4-ff26-4614-a9b1-ddb50c1a860c" />
+</p>
+
+---
+
+### Customizable Bottom Panel
+Tailor the playback experience with a versatile bottom control panel. Choose from 3 different progress indicator types: a standard seekbar, an animated progress bar, or an audio waveform. The waveform mode offers 7 distinct styles to match your UI preference. You can further customize the layout with various volume control designs and L/R channel VU-meters.
+
+<br>
+
+<p align="center">
+  <i>Various bottom panel layouts</i><br><br>
+  <img width="2038" height="680" alt="custom bottom panel2" src="https://github.com/user-attachments/assets/56e13e79-f71e-4db7-bc11-12a152096c43" />
+</p>
+
+---
+
+### Glass Mode & Minimalist Bottom Panel
+The player features a glass mode. Additionally, the bottom control panel can be switched to a minimalist layout, reducing its visual footprint by displaying only essential controls.
+
+<br>
+
+<p align="center">
+  <i>Glass interface mode paired with the minimalist bottom panel</i><br><br>
+  <img width="2042" height="1001" alt="image_2026-09-13_19-30-50" src="https://github.com/user-attachments/assets/e702daa9-2396-43fa-a78d-d47976b959c6" />
+</p>
+
+---
+
+### Offline Statistics
+Track your listening habits locally with a statistics dashboard. All data is processed and stored entirely offline. The module logs detailed metrics including total listening time, daily streaks, skip rates, audio format distribution. It also dynamically generates Top 10 lists for your most played tracks, artists, and albums, all of this can be filtered by specific time periods ranging from the last 24 hours to your all-time listening history.
+
+<br>
+
+<p align="center">
+  <i>Statistics dashboard</i><br><br>
+  <img width="1803" height="820" alt="stats" src="https://github.com/user-attachments/assets/f723db70-fe82-4e5d-ae31-7c80a50820de" />
+</p>
+
 ### Core Features
 
  Audio Engine & Playback
@@ -110,6 +158,10 @@ Manage your upcoming tracks with the integrated playback queue. For a more dynam
 * **Data & Utilities:** SQLite for local storage, TagLib# for metadata processing, and H.NotifyIcon.
 
 © 2026 JLS Audio Player. Made by JyllyS.
+
+## Disclaimer
+
+Please note that this is my first project, originally developed for personal use (which is why the first public release is version 1.4.32). Because of this, you may encounter some architectural flaws, illogical solutions, and code duplication.
 
 ## License
 
