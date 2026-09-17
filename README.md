@@ -6,7 +6,7 @@
 ---
 
 <p align="center">
-  <b>An audiophile-focused music player powered by the BASS audio engine, customizable visuals, and listening statistics, built for a fully offline and privacy-friendly listening experience.</b>
+  <b>A music player powered by the BASS audio engine, featuring customizable visuals and listening statistics — built for a fully offline, privacy-friendly experience.</b>
 </p>
 
 ---
@@ -128,7 +128,7 @@ Track your listening habits locally with a statistics dashboard. All data is pro
 
  Audio Engine & Playback
 * **WASAPI / ASIO** output
-* **Gapless Playback & Crossfade**
+* **Gapless Playback**
 * **High-Resolution Audio Support**
 * **Smart Silence Skipping**
 
