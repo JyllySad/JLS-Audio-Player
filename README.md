@@ -76,6 +76,18 @@ Manage your upcoming tracks with the integrated playback queue. For a more dynam
   <img width="2042" height="1001" alt="image_2026-09-13_18-36-11" src="https://github.com/user-attachments/assets/7281e933-414d-46a4-8c39-7b551e4b8e67" />
 </p>
 
+---
+
+### Full-Screen Audio Visualizers
+Immerse yourself in the music with 7 real-time full-screen audio visualizers. Choose from a variety of reactive styles to match your preference: Classic Bars, Radial Spectrum, Mirrored Mountains, Smooth Bars, Oscilloscope Wave, Split Smooth Bars, and Perspective Road.
+
+<br>
+
+<p align="center">
+  <i>Classic Bars visualizer in full-screen mode</i><br><br>
+  <img width="2042" height="1001" alt="image_2026-09-14_03-23-22" src="https://github.com/user-attachments/assets/d17b71c4-ff26-4614-a9b1-ddb50c1a860c" />
+</p>
+
 ### Core Features
 
  Audio Engine & Playback
