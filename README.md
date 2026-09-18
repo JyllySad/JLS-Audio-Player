@@ -139,25 +139,25 @@ Manage your library directly within the app using the Tag Editor to modify track
 
 ### Core Features
 
- Audio Engine & Playback
+**Audio Engine & Playback**
 * **WASAPI / ASIO** output
 * **Gapless Playback**
 * **High-Resolution Audio Support**
 * **Smart Silence Skipping**
 
- UI & Visuals
+**UI & Visuals**
 * **Audio-reactive fluid background**
 * **Smart color extraction** from Album Art
 * **Customizable Waveforms & VU-meters**
 * **Minimal UI layouts**
 
- Advanced Statistics
+**Advanced Statistics**
 * **Detailed listening session tracking**
 * **Top Tracks, Artists & Albums logic**
 * **Skip rate & Completion percentages**
 * **Streak counter & Audio format stats**
 
- Workflow & Lyrics
+**Workflow & Lyrics**
 * **Built-in LRC Editor** with ms-sync
 * **Single & Bulk Tag Editing**
 * **Global Hotkeys & Media Keys support**
