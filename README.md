@@ -135,6 +135,8 @@ Manage your library directly within the app using the Tag Editor to modify track
 | :---: | :---: |
 | <img width="508" height="750" alt="image_2026-09-18_03-32-28" src="https://github.com/user-attachments/assets/d1854fdf-6b27-41e7-9ae5-100bf6d65ad6" /> | <img width="637" height="685" alt="image_2026-09-18_03-27-06" src="https://github.com/user-attachments/assets/199f46c7-5747-4912-b3b3-76282ffd87bb" /> |
 
+---
+
 ### Core Features
 
  Audio Engine & Playback
