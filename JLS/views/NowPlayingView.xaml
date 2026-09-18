@@ -2247,7 +2247,7 @@
                                                                     <MultiDataTrigger.EnterActions>
                                                                         <BeginStoryboard>
                                                                             <Storyboard>
-                                                                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(BlurEffect.Radius)" To="7" Duration="0:0:0.25">
+                                                                                <DoubleAnimation Storyboard.TargetProperty="(UIElement.Effect).(BlurEffect.Radius)" To="8" Duration="0:0:0.25">
                                                                                     <DoubleAnimation.EasingFunction>
                                                                                         <QuadraticEase EasingMode="EaseOut"/>
                                                                                     </DoubleAnimation.EasingFunction>
