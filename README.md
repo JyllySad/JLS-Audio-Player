@@ -124,6 +124,17 @@ Track your listening habits locally with a statistics dashboard. All data is pro
   <img width="1803" height="820" alt="stats" src="https://github.com/user-attachments/assets/f723db70-fe82-4e5d-ae31-7c80a50820de" />
 </p>
 
+---
+
+### Additional Features
+Manage your library directly within the app using the Tag Editor to modify track metadata and view detailed file properties. For lyrics, the built-in LRC Editor allows you to create and synchronize text with millisecond precision. The player also includes an OSD (On-Screen Display) popup for quick track change notifications and a Mini Player mode to minimize the desktop footprint while keeping essential controls accessible.
+
+<br>
+
+| <i>Track Information & Tag Editor</i> | <i>Built-in LRC Editor</i> |
+| :---: | :---: |
+| <img width="508" height="750" alt="image_2026-09-18_03-32-28" src="https://github.com/user-attachments/assets/d1854fdf-6b27-41e7-9ae5-100bf6d65ad6" /> | <img width="637" height="685" alt="image_2026-09-18_03-27-06" src="https://github.com/user-attachments/assets/199f46c7-5747-4912-b3b3-76282ffd87bb" /> |
+
 ### Core Features
 
  Audio Engine & Playback
